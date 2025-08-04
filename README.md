@@ -20,3 +20,29 @@ GitHub: [https://github.com/Sushma-1706](https://github.com/Sushma-1706)
 
 All rights reserved.  
 Please do not copy or redistribute this project without explicit written permission from the author.
+
+## 🛠 Contribute to CodeClarity
+
+We're improving the UI/UX of this intelligent AI-powered code explainer.  
+If you’re a designer or developer with ideas — we’d love your input!
+
+### 👀 View the Code
+[Click here to view the repository](https://github.com/Sushma-1706/CodeClarity)
+
+### 🎨 Design Goals
+- Clean, modern, and responsive layout
+- Light/Dark mode toggle
+- Visual focus on code input + diagram output
+- Smooth animations & intuitive layout
+
+### 💡 Suggest Improvements
+- Open an **Issue** describing your feedback or feature idea.
+- Or fork this repo and submit a **Pull Request (PR)** with your changes!
+
+### 🙌 Getting Started
+```bash
+git clone https://github.com/Sushma-1706/CodeClarity.git
+cd CodeClarity
+npm install
+npm run dev
+
