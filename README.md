@@ -1,12 +1,14 @@
-# CodeClarity
+<div align="center">
+  <h1><b>CodeClarity</b></h1>   
 
-![GitHub Stars](https://img.shields.io/github/stars/Sushma-1706/CodeClarity?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/Sushma-1706/CodeClarity?style=social)
-![GitHub Watchers](https://img.shields.io/github/watchers/Sushma-1706/CodeClarity?style=social)
+[![GitHub stars](https://img.shields.io/github/stars/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/stargazers)  
+[![GitHub forks](https://img.shields.io/github/forks/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/network/members)  
+[![GitHub watchers](https://img.shields.io/github/watchers/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/watchers)  
 
-An AI-powered platform that explains, debugs, and visualizes code with interactive flowcharts, 3D models, and voice narration.
+<h3>An AI-powered platform that explains, debugs, and visualizes code with interactive flowcharts, 3D models, and voice narration.</h3>
+</div>
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 💡 Full Project Vision
 
@@ -23,23 +25,33 @@ It can:
 - Suggest smart optimizations with side-by-side comparisons.
 - Auto-generate quizzes, test cases, and summary files.
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## ✨ Features
 
-- 🧠 **Multi-level code explanation** (kids to advanced learners)
-- 🔍 **"Why?" mode** for line/block explanation
-- 🎞️ **Interactive flowcharts and 3D visuals** of logic & data structures
-- 🎙️ **Voice-based narration** of code
-- 🧪 **Secure sandbox** for real-time execution and variable tracking
-- 📊 **Complexity analysis** (time & space)
-- 🛠️ **Smart code fixes and refactor suggestions**
-- 🧩 **Auto quiz + test case generator**
-- 📤 **Export** visuals, diagrams, summaries
-- 💬 **Real-world analogies** for better understanding
-- 🔗 **GitHub repo import and version tracking**
+ 🧠 **Multi-level code explanation** (kids to advanced learners)
+ 
+ 🔍 **"Why?" mode** for line/block explanation
+ 
+ 🎞️ **Interactive flowcharts and 3D visuals** of logic & data structures
+ 
+ 🎙️ **Voice-based narration** of code
+ 
+ 🧪 **Secure sandbox** for real-time execution and variable tracking
+ 
+ 📊 **Complexity analysis** (time & space)
+ 
+ 🛠️ **Smart code fixes and refactor suggestions**
+ 
+ 🧩 **Auto quiz + test case generator**
+ 
+ 📤 **Export** visuals, diagrams, summaries
+ 
+ 💬 **Real-world analogies** for better understanding
+ 
+ 🔗 **GitHub repo import and version tracking**
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 🔐 Ownership & Authorship
 
@@ -52,33 +64,29 @@ This project and its concept were originally created and led by:
 All rights reserved.  
 Please do not copy or redistribute this project without explicit written permission from the author.
 
----
 
-## 🛠 Contribute to CodeClarity
-
-We’re improving the UI/UX of this intelligent AI-powered code explainer.
-
-If you're a designer or developer with cool ideas, your contributions are welcome!
-
----
-
-## 🎨 Design Goals
-
-- 🧼 Clean, modern, responsive layout
-- 🌓 Light/Dark mode toggle
-- 🎯 Visual focus on input & output
-- 🌀 Smooth animations and intuitive UI
-
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 💡 Suggest Improvements
 
 You can:
 
-- Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues) with your suggestions or bugs
-- Fork the repo, make changes, and submit a Pull Request (PR)
+- Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues) describing the suggestion/bug and expected behavior
+- Fork the repo, create a feature branch, make changes, and submit a Pull Request (PR)
 
----
+**Quick PR steps**
+```bash
+fork → git clone
+cd CodeClarity
+
+# make edits
+git add .
+git commit -m "Commit Message Here"
+git push -u origin docs/update-readme
+# open a PR from your fork
+```
+
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 🙌 Getting Started
 
@@ -97,4 +105,7 @@ npm run dev
 This project is licensed under the MIT License.
 You can use, modify, and distribute this project freely, but attribution is required.
 “You can do almost anything you want with this code, just don’t hold us liable, and please keep our names in it.”
+```
+
+<h3 align="center">Show some &nbsp;❤️&nbsp; by &nbsp;🌟&nbsp; this repository!</h3>
 
