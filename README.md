@@ -30,15 +30,25 @@ It can:
 ## ✨ Features
 
  🧠 **Multi-level code explanation** (kids to advanced learners)
+ 
  🔍 **"Why?" mode** for line/block explanation
+ 
  🎞️ **Interactive flowcharts and 3D visuals** of logic & data structures
+ 
  🎙️ **Voice-based narration** of code
+ 
  🧪 **Secure sandbox** for real-time execution and variable tracking
+ 
  📊 **Complexity analysis** (time & space)
+ 
  🛠️ **Smart code fixes and refactor suggestions**
+ 
  🧩 **Auto quiz + test case generator**
+ 
  📤 **Export** visuals, diagrams, summaries
+ 
  💬 **Real-world analogies** for better understanding
+ 
  🔗 **GitHub repo import and version tracking**
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
