@@ -1,4 +1,5 @@
 <h1><b>CodeClarity</b></h1>   
+
 [![GitHub stars](https://img.shields.io/github/stars/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/stargazers)  
 [![GitHub forks](https://img.shields.io/github/forks/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/network/members)  
 [![GitHub watchers](https://img.shields.io/github/watchers/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/watchers)  
