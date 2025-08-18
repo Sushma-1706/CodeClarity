@@ -5,7 +5,7 @@
 
 An AI-powered platform that explains, debugs, and visualizes code with interactive flowcharts, 3D models, and voice narration.
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 💡 Full Project Vision
 
@@ -22,7 +22,7 @@ It can:
 - Suggest smart optimizations with side-by-side comparisons.
 - Auto-generate quizzes, test cases, and summary files.
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## ✨ Features
 
@@ -38,7 +38,7 @@ It can:
 - 💬 **Real-world analogies** for better understanding
 - 🔗 **GitHub repo import and version tracking**
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 🔐 Ownership & Authorship
 
@@ -51,7 +51,7 @@ This project and its concept were originally created and led by:
 All rights reserved.  
 Please do not copy or redistribute this project without explicit written permission from the author.
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 🛠 Contribute to CodeClarity
 
@@ -59,7 +59,7 @@ We’re improving the UI/UX of this intelligent AI-powered code explainer.
 
 If you're a designer or developer with cool ideas, your contributions are welcome!
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 🎨 Design Goals
 
@@ -68,7 +68,7 @@ If you're a designer or developer with cool ideas, your contributions are welcom
 - 🎯 Visual focus on input & output
 - 🌀 Smooth animations and intuitive UI
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 💡 Suggest Improvements
 
@@ -77,7 +77,7 @@ You can:
 - Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues) with your suggestions or bugs
 - Fork the repo, make changes, and submit a Pull Request (PR)
 
----
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ## 🙌 Getting Started
 
