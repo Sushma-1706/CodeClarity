@@ -90,8 +90,20 @@ If you're a designer or developer with cool ideas, your contributions are welcom
 
 You can:
 
-- Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues) with your suggestions or bugs
-- Fork the repo, make changes, and submit a Pull Request (PR)
+- Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues) describing the suggestion/bug and expected behavior
+- Fork the repo, create a feature branch, make changes, and submit a Pull Request (PR)
+
+**Quick PR steps**
+```bash
+fork → git clone
+cd CodeClarity
+
+# make edits
+git add .
+git commit -m "Commit Message Here"
+git push -u origin docs/update-readme
+# open a PR from your fork
+```
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
