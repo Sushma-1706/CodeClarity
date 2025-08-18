@@ -29,17 +29,17 @@ It can:
 
 ## ✨ Features
 
-- 🧠 **Multi-level code explanation** (kids to advanced learners)
-- 🔍 **"Why?" mode** for line/block explanation
-- 🎞️ **Interactive flowcharts and 3D visuals** of logic & data structures
-- 🎙️ **Voice-based narration** of code
-- 🧪 **Secure sandbox** for real-time execution and variable tracking
-- 📊 **Complexity analysis** (time & space)
-- 🛠️ **Smart code fixes and refactor suggestions**
-- 🧩 **Auto quiz + test case generator**
-- 📤 **Export** visuals, diagrams, summaries
-- 💬 **Real-world analogies** for better understanding
-- 🔗 **GitHub repo import and version tracking**
+ 🧠 **Multi-level code explanation** (kids to advanced learners)
+ 🔍 **"Why?" mode** for line/block explanation
+ 🎞️ **Interactive flowcharts and 3D visuals** of logic & data structures
+ 🎙️ **Voice-based narration** of code
+ 🧪 **Secure sandbox** for real-time execution and variable tracking
+ 📊 **Complexity analysis** (time & space)
+ 🛠️ **Smart code fixes and refactor suggestions**
+ 🧩 **Auto quiz + test case generator**
+ 📤 **Export** visuals, diagrams, summaries
+ 💬 **Real-world analogies** for better understanding
+ 🔗 **GitHub repo import and version tracking**
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
@@ -99,4 +99,7 @@ npm run dev
 This project is licensed under the MIT License.
 You can use, modify, and distribute this project freely, but attribution is required.
 “You can do almost anything you want with this code, just don’t hold us liable, and please keep our names in it.”
+```
+
+<h3 align="center">Show some &nbsp;❤️&nbsp; by &nbsp;🌟&nbsp; this repository!</h3>
 
