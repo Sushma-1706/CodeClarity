@@ -64,25 +64,6 @@ This project and its concept were originally created and led by:
 All rights reserved.  
 Please do not copy or redistribute this project without explicit written permission from the author.
 
-![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
-
-## 🛠 Contribute to CodeClarity
-
-We’re improving the UI/UX of this intelligent AI-powered code explainer.
-
-If you're a designer or developer with cool ideas, your contributions are welcome!
-
-![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
-
-## 🎨 Design Goals
-
- 🧼 Clean, modern, responsive layout
-
- 🌓 Light/Dark mode toggle
- 
- 🎯 Visual focus on input & output
- 
- 🌀 Smooth animations and intuitive UI
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
