@@ -1,11 +1,11 @@
 <div align="center">
-<h1><b>CodeClarity</b></h1>   
+  <h1><b>CodeClarity</b></h1>   
 
 [![GitHub stars](https://img.shields.io/github/stars/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/stargazers)  
 [![GitHub forks](https://img.shields.io/github/forks/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/network/members)  
 [![GitHub watchers](https://img.shields.io/github/watchers/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/watchers)  
 
-An AI-powered platform that explains, debugs, and visualizes code with interactive flowcharts, 3D models, and voice narration.
+<h3>An AI-powered platform that explains, debugs, and visualizes code with interactive flowcharts, 3D models, and voice narration.</h3>
 </div>
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
