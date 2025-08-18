@@ -76,10 +76,13 @@ If you're a designer or developer with cool ideas, your contributions are welcom
 
 ## 🎨 Design Goals
 
-- 🧼 Clean, modern, responsive layout
-- 🌓 Light/Dark mode toggle
-- 🎯 Visual focus on input & output
-- 🌀 Smooth animations and intuitive UI
+ 🧼 Clean, modern, responsive layout
+
+ 🌓 Light/Dark mode toggle
+ 
+ 🎯 Visual focus on input & output
+ 
+ 🌀 Smooth animations and intuitive UI
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
