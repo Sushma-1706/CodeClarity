@@ -1,144 +1,134 @@
-🤝 Contributing to CodeClarity
+# 🤝 Contributing to CodeClarity
 
-Welcome, and thank you for your interest in contributing to CodeClarity — an AI-powered platform that explains, debugs, and visualizes code using flowcharts, 3D models, and voice narration.
+Welcome, and thank you for your interest in contributing to **CodeClarity** — an AI-powered platform that explains, debugs, and visualizes code using flowcharts, 3D models, and voice narration.
 
-Whether you’re here to fix bugs, suggest features, improve documentation, or enhance UI/UX, your contributions make a huge difference. We’re excited to have you on board!
+Whether you’re fixing bugs, suggesting new features, improving documentation, or enhancing UI/UX — your contribution matters. We’re excited to have you on board! 🚀
 
-🚀 Getting Started
+---
 
-To start contributing, set up the project locally by following these steps:
+## 🛠 Getting Started
 
+To set up the project locally:
+
+```bash
 git clone https://github.com/Sushma-1706/CodeClarity.git
 cd CodeClarity/CodeViz
 npm install
 npm run dev
+Now open your browser at http://localhost:3000 (or the port shown in your terminal).
 
+🎯 How You Can Contribute
+🧠 Feature Suggestions – Share ideas via Issues or Discussions.
 
-Open your browser at http://localhost:3000 (or the port specified) to see the app running locally.
+🐞 Bug Fixes – Help us squash bugs and improve stability.
 
-🎯 Ways You Can Contribute
+🎨 Design Enhancements – Propose clean, accessible, and responsive UI/UX designs.
 
-There are many ways to get involved:
+🧪 Testing – Improve test coverage for reliability.
 
-🧠 Feature Suggestions: Got a great idea? Open an issue or discussion!
+📚 Documentation – Make guides, READMEs, and code comments clearer.
 
-🐞 Bug Fixes: Help squash bugs and improve stability.
+⚡ Performance – Optimize performance and efficiency.
 
-🎨 Design Improvements: Enhance UI/UX with polished, accessible designs.
+All contributions, big or small, are valuable. 🙌
 
-🧪 Testing: Add or improve test coverage to ensure reliability.
+📋 Code of Conduct
+We follow the Contributor Covenant Code of Conduct.
+Please keep interactions respectful, inclusive, and supportive.
 
-📚 Documentation: Make guides, README, and code comments clearer and easier to understand.
-
-💡 Performance: Optimize code and improve app speed or efficiency.
-
-No matter your skill level, your input is valuable.
-
-📋 Our Code of Conduct
-
-We are committed to maintaining a respectful, inclusive, and welcoming community for everyone. Please read and adhere to the Contributor Covenant Code of Conduct to keep CodeClarity a safe space.
-
-🛠 How to Contribute
-
-Follow these steps for a smooth contribution:
-
-Fork the repository by clicking the Fork button at the top-right corner.
+🛠 Contribution Workflow
+Fork the repository.
 
 Clone your fork locally:
 
+bash
+Copy
+Edit
 git clone https://github.com/YOUR_USERNAME/CodeClarity.git
 cd CodeClarity/CodeViz
+Create a branch for your feature or fix:
 
-
-Create a new branch for your feature or fix:
-
+bash
+Copy
+Edit
 git checkout -b feature/your-feature-name
+Make changes following project coding standards.
 
+Test locally:
 
-Make your changes following our coding style and best practices.
-
-Test your changes locally:
-
+bash
+Copy
+Edit
 npm run lint    # Check code style
-npm run dev     # Run app to test manually
+npm run dev     # Run app
+Commit your changes:
 
-
-Commit your changes with a clear and concise message:
-
+bash
+Copy
+Edit
 git add .
-git commit -m "Add: Brief description of your changes"
+git commit -m "feat: add <short-description>"
+Push your branch:
 
-
-Push your branch to your fork:
-
+bash
+Copy
+Edit
 git push origin feature/your-feature-name
-
-
-Open a Pull Request on GitHub from your fork. Provide a clear description of your changes and link any related issues.
+Open a Pull Request on GitHub and clearly describe your changes.
 
 🎨 Design Contributions
+If you’re contributing to UI/UX:
 
-If you’re improving UI/UX:
+Attach mockups, sketches, or screenshots in your PR/issue.
 
-Provide mockups, sketches, or screenshots in your PR or issue.
+Explain your design decisions.
 
-Explain the motivation behind your design decisions.
-
-Follow our design principles: clean, intuitive, accessible, and responsive.
+Follow design principles: clean, intuitive, accessible, responsive.
 
 ✅ Pull Request Checklist
+Before submitting your PR, ensure:
 
-Before submitting your PR, please make sure:
+PR title & commit messages are clear.
 
-Your PR has a meaningful title and clear commit messages.
+Feature/fix works as expected.
 
-Your feature or fix works as expected.
+UI changes include screenshots/GIFs.
 
-UI changes include screenshots or GIFs where applicable.
+Linked related issues or discussions.
 
-You have linked relevant issues or feature requests.
-
-Your changes do not break existing functionality.
-
-No sensitive or private data is included.
+No breaking changes or sensitive data included.
 
 💡 Suggesting Features
+Use this template when opening a feature request:
 
-You can open a new issue with the following template:
+Feature Idea
+A short summary of your idea.
 
-### Feature Idea
-Concise summary of your idea.
+Why It’s Useful
+How it improves the app or user experience.
 
-### Why It’s Useful
-How this feature improves the app or user experience.
+Implementation Suggestions (Optional)
+Tools, libraries, or approaches you recommend.
 
-### Implementation Suggestions (Optional)
-Tools, libraries, or approaches you think could work.
+❓ Contributor Support
+We want contributors to feel supported:
 
-❓ Handling Contributor Doubts & Issues
+Open Communication – Ask questions via Issues/Discussions.
 
-We understand that contributors might have questions or face challenges during the contribution process. Here’s how we, as maintainers, help resolve them:
+Timely Responses – Maintainers reply promptly and respectfully.
 
-Open Communication: Contributors are encouraged to open issues on GitHub for any doubts, questions, or clarifications related to the project or contributions.
+Guidance – Complex doubts will be addressed with resources and step-by-step help.
 
-Timely Responses: Maintainers strive to respond promptly and respectfully to all queries to keep collaboration smooth.
+Community Help – Everyone is encouraged to collaborate.
 
-Detailed Guidance: For complex doubts, maintainers provide step-by-step explanations, resources, or code references to help contributors understand and resolve the issues.
+Escalation – For deeper discussions, maintainers may schedule calls (Slack/Discord).
 
-Encourage Community Help: Sometimes, community members or other contributors may also provide valuable insights—maintainers foster an inclusive environment where everyone can help.
+🧾 License
+By contributing, you agree to license your work under the MIT License.
+Contributors will be credited in CONTRIBUTORS.md (coming soon).
 
-Respectful and Supportive: We maintain a friendly, patient, and supportive tone to make contributors feel welcome and encouraged.
-
-Escalation: If an issue requires deeper discussion, maintainers may schedule meetings or discussions via project communication channels (Slack, Discord, etc.) for real-time help.
-
-🧾 Licensing
-
-By contributing, you agree to license your code under the MIT License. All contributors will be credited in CONTRIBUTORS.md (coming soon).
-
-🙏 Thank You!
-
-Your contributions help make CodeClarity an amazing tool for developers worldwide. We truly appreciate your time, energy, and creativity.
-
-Happy coding! 💙
+🙏 Thank You
+Your time, creativity, and skills make CodeClarity better for developers worldwide.
+We’re grateful for your contributions. 💙
 
 Maintainer: Damacharla Sushma
