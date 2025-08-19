@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { 
   GitBranch,
   TestTube,
@@ -19,49 +20,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Tools
 const tools = [
-  { 
-    id: "sandbox", 
-    name: "Live Sandbox", 
-    icon: TestTube, 
-    description: "Execute code safely",
-    status: "ready"
-  },
-  { 
-    id: "version-compare", 
-    name: "Version Compare", 
-    icon: ArrowLeftRight, 
-    description: "Track code changes",
-    status: "active"
-  },
-  { 
-    id: "refactor", 
-    name: "Code Refactor", 
-    icon: RefreshCw, 
-    description: "Optimize performance",
-    status: "ready"
-  },
-  { 
-    id: "test-generator", 
-    name: "Test Generator", 
-    icon: Puzzle, 
-    description: "Auto-generate tests",
-    status: "ready"
-  },
-  { 
-    id: "quiz", 
-    name: "Quiz Generator", 
-    icon: Trophy, 
-    description: "Practice questions",
-    status: "ready"
-  },
-  { 
-    id: "git-integration", 
-    name: "Git Integration", 
-    icon: Github, 
-    description: "Import from repository",
-    status: "ready"
-  }
+  { id: "sandbox", name: "Live Sandbox", icon: TestTube, description: "Execute code safely", status: "ready" },
+  { id: "version-compare", name: "Version Compare", icon: ArrowLeftRight, description: "Track code changes", status: "active" },
+  { id: "refactor", name: "Code Refactor", icon: RefreshCw, description: "Optimize performance", status: "ready" },
+  { id: "test-generator", name: "Test Generator", icon: Puzzle, description: "Auto-generate tests", status: "ready" },
+  { id: "quiz", name: "Quiz Generator", icon: Trophy, description: "Practice questions", status: "ready" },
+  { id: "git-integration", name: "Git Integration", icon: Github, description: "Import from repository", status: "ready" }
 ];
 
 const codeVersions = [
@@ -72,8 +38,24 @@ const codeVersions = [
 
 const tags = ["recursion", "fibonacci", "dynamic-programming", "algorithms", "optimization"];
 
+// Quiz Questions
+const quizQuestions = [
+  {
+    q: "What is the base case in recursion?",
+    options: ["A condition to stop recursion", "A loop counter", "A cache variable", "An infinite call"],
+    answer: 0,
+  },
+  {
+    q: "Which technique avoids recomputation in recursion?",
+    options: ["Iteration", "Brute Force", "Memoization", "Randomization"],
+    answer: 2,
+  },
+];
+
 export const ToolsPanel = () => {
   const [activeTab, setActiveTab] = useState("tools");
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number | null }>({});
 
   return (
     <div className="space-y-6">
@@ -83,7 +65,7 @@ export const ToolsPanel = () => {
           <h2 className="text-2xl font-bold text-gradient">Developer Tools</h2>
           <p className="text-muted-foreground">Advanced features for code analysis</p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {["tools", "history", "tags"].map((tab) => (
             <Button
@@ -129,6 +111,11 @@ export const ToolsPanel = () => {
                     variant="outline" 
                     size="sm" 
                     className="w-full group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors"
+                    onClick={() => {
+                      if (tool.id === "quiz") {
+                        setQuizOpen(true);
+                      }
+                    }}
                   >
                     Launch Tool
                   </Button>
@@ -139,105 +126,63 @@ export const ToolsPanel = () => {
         </div>
       )}
 
-      {/* Version History */}
-      {activeTab === "history" && (
-        <Card className="glass">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <History className="h-5 w-5 text-accent" />
-              Version History
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {codeVersions.map((version, index) => (
-              <div 
-                key={version.version}
-                className="flex items-center justify-between p-4 rounded-lg border border-border/20 bg-surface-muted hover:bg-surface-elevated transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={cn(
-                    "w-3 h-3 rounded-full",
-                    index === 0 ? "bg-accent" : "bg-muted-foreground"
-                  )} />
-                  <div>
-                    <div className="font-medium">{version.version}</div>
-                    <div className="text-sm text-muted-foreground">{version.timestamp}</div>
-                  </div>
-                  <div className="text-sm">{version.changes}</div>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="ghost" size="icon-sm">
-                    <ArrowLeftRight className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon-sm">
-                    <GitBranch className="h-4 w-4" />
-                  </Button>
+      {/* Quiz Modal */}
+      <Dialog
+        open={quizOpen}
+        onOpenChange={(open) => {
+          setQuizOpen(open);
+          if (!open) setSelectedAnswers({});
+        }}
+      >
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Quiz Generator</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {quizQuestions.map((q, i) => (
+              <div key={i} className="space-y-2">
+                <p className="font-medium">{i + 1}. {q.q}</p>
+                <div className="flex flex-col gap-1">
+                  {q.options.map((opt, j) => {
+                    const isSelected = selectedAnswers[i] === j;
+                    const isCorrect = q.answer === j;
+                    const answered = selectedAnswers[i] !== undefined;
+
+                    return (
+                      <Button
+                        key={j}
+                        variant={isCorrect && answered ? "secondary" : isSelected ? "destructive" : "outline"}
+                        size="sm"
+                        className={`justify-start ${
+                          answered
+                            ? isCorrect
+                              ? "border-green-500 text-green-600"
+                              : isSelected
+                              ? "border-red-500 text-red-600"
+                              : ""
+                            : ""
+                        }`}
+                        disabled={answered}
+                        onClick={() => {
+                          setSelectedAnswers((prev) => ({
+                            ...prev,
+                            [i]: j,
+                          }));
+                        }}
+                      >
+                        {opt}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
             ))}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Tags & Categories */}
-      {activeTab === "tags" && (
-        <Card className="glass">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Tag className="h-5 w-5 text-accent" />
-              Code Concepts & Tags
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <Button
-                  key={tag}
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full hover:bg-secondary hover:text-secondary-foreground"
-                >
-                  #{tag}
-                </Button>
-              ))}
-            </div>
-            
-            <div className="p-4 bg-surface-muted rounded-lg border border-border/20">
-              <h4 className="font-medium mb-2">Quick Reference</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                <div><strong>Recursion:</strong> Function calling itself</div>
-                <div><strong>Base Case:</strong> Stopping condition</div>
-                <div><strong>Time Complexity:</strong> Algorithm efficiency</div>
-                <div><strong>Memoization:</strong> Caching results</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Quick Actions */}
-      <Card className="glass">
-        <CardContent className="pt-6">
-          <div className="flex flex-wrap gap-3">
-            <Button variant="secondary" size="sm" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export Project
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Share2 className="h-4 w-4" />
-              Share Link
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Bookmark className="h-4 w-4" />
-              Save Session
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <FileQuestion className="h-4 w-4" />
-              Generate Docs
-            </Button>
           </div>
-        </CardContent>
-      </Card>
+          <DialogFooter>
+            <Button onClick={() => setQuizOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
