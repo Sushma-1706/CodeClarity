@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,11 +7,15 @@ import { CodeEditor } from "../features/CodeEditor";
 import { VisualizationPanel } from "../features/VisualizationPanel";
 import { AnalysisPanel } from "../features/AnalysisPanel";
 import { ToolsPanel } from "../features/ToolsPanel";
+import { PatternRecognitionPanel } from "../features/PatternRecognitionPanel";
+import { MLInsightsPanel } from "../features/MLInsightsPanel";
 import { 
   Code, 
   Eye, 
   Brain, 
   Wrench,
+  Sparkles,
+  Cpu,
   ChevronLeft,
   ChevronRight,
   Maximize2,
@@ -22,6 +26,8 @@ import heroImage from "@/assets/hero-bg.jpg";
 
 const tabs = [
   { id: "editor", name: "Code Editor", icon: Code, component: CodeEditor },
+  { id: "patterns", name: "Pattern Recognition", icon: Sparkles, component: PatternRecognitionPanel },
+  { id: "ml-insights", name: "ML Insights", icon: Cpu, component: MLInsightsPanel },
   { id: "visualize", name: "Visualization", icon: Eye, component: VisualizationPanel },
   { id: "analyze", name: "AI Analysis", icon: Brain, component: AnalysisPanel },
   { id: "tools", name: "Tools", icon: Wrench, component: ToolsPanel },
@@ -31,6 +37,21 @@ export const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("editor");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentCode, setCurrentCode] = useState(`// Welcome to CodeViz AI!
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(10));`);
+  const [currentLanguage, setCurrentLanguage] = useState("javascript");
+
+  // Listen for ML insights navigation
+  useEffect(() => {
+    const handleSwitchToMLInsights = () => setActiveTab("ml-insights");
+    window.addEventListener('switchToMLInsights', handleSwitchToMLInsights);
+    return () => window.removeEventListener('switchToMLInsights', handleSwitchToMLInsights);
+  }, []);
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || CodeEditor;
 
@@ -164,7 +185,20 @@ export const Dashboard = () => {
 
             {/* Dynamic Content */}
             <div className="animate-fade-in">
-              <ActiveComponent />
+              {activeTab === "editor" ? (
+                <CodeEditor 
+                  onCodeChange={setCurrentCode}
+                  onLanguageChange={setCurrentLanguage}
+                  initialCode={currentCode}
+                  initialLanguage={currentLanguage}
+                />
+              ) : activeTab === "patterns" ? (
+                <PatternRecognitionPanel code={currentCode} language={currentLanguage} />
+              ) : activeTab === "ml-insights" ? (
+                <MLInsightsPanel code={currentCode} language={currentLanguage} />
+              ) : (
+                <ActiveComponent />
+              )}
             </div>
           </main>
         </div>

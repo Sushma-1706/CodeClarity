@@ -32,16 +32,28 @@ const modes = [
   { id: "technical", name: "Technical", icon: Brain, description: "For 20-year-olds" },
 ];
 
-export const CodeEditor = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-  const [selectedMode, setSelectedMode] = useState("simplified");
-  const [code, setCode] = useState(`// Welcome to CodeViz AI!
+interface CodeEditorProps {
+  onCodeChange?: (code: string) => void;
+  onLanguageChange?: (language: string) => void;
+  initialCode?: string;
+  initialLanguage?: string;
+}
+
+export const CodeEditor = ({ 
+  onCodeChange, 
+  onLanguageChange, 
+  initialCode = `// Welcome to CodeViz AI!
 function fibonacci(n) {
   if (n <= 1) return n;
   return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-console.log(fibonacci(10));`);
+console.log(fibonacci(10));`,
+  initialLanguage = "javascript"
+}: CodeEditorProps = {}) => {
+  const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
+  const [selectedMode, setSelectedMode] = useState("simplified");
+  const [code, setCode] = useState(initialCode);
 
   return (
     <div className="space-y-6">
@@ -84,7 +96,10 @@ console.log(fibonacci(10));`);
               {languages.map((lang) => (
                 <button
                   key={lang.id}
-                  onClick={() => setSelectedLanguage(lang.id)}
+                  onClick={() => {
+                    setSelectedLanguage(lang.id);
+                    onLanguageChange?.(lang.id);
+                  }}
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2",
                     selectedLanguage === lang.id
@@ -155,7 +170,10 @@ console.log(fibonacci(10));`);
           <div className="relative">
             <Textarea
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => {
+                setCode(e.target.value);
+                onCodeChange?.(e.target.value);
+              }}
               placeholder="Paste your code here or start typing..."
               className="min-h-[300px] font-mono text-sm bg-editor-bg text-editor-foreground border-border/20 resize-none"
               style={{ 
