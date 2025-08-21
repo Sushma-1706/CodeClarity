@@ -27,6 +27,19 @@ It can:
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
+## 🏗️ Project Structure
+
+A high-level overview of the project's source code.
+
+src/
+├── analyzers/    # Code parsing and analysis logic
+├── generators/   # Explanation generation logic
+├── models/       # Data structures
+├── utils/        # Helper functions
+└── main.py       # CLI entry point
+
+![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
+
 ## ✨ Features
 
  🧠 **Multi-level code explanation** (kids to advanced learners)
