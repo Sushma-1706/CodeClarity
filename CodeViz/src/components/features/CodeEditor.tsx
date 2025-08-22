@@ -18,6 +18,7 @@ import {
   Save
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 const languages = [
   { id: "javascript", name: "JavaScript", color: "bg-yellow-500" },
@@ -161,7 +162,14 @@ console.log(fibonacci(10));`,
               <Palette className="h-3 w-3" />
               Syntax Highlighting
             </Badge>
-            <Button variant="ghost" size="icon-sm">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => {
+                navigator.clipboard.writeText(code);
+                toast({ description: "Code copied to clipboard" });
+              }}
+            >
               <Copy className="h-4 w-4" />
             </Button>
           </div>
