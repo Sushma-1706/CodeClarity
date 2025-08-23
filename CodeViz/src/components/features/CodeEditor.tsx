@@ -2,12 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   Play, 
   Upload, 
   Copy, 
-  Download, 
   Settings,
   FileText,
   Brain,
@@ -167,29 +165,31 @@ console.log(fibonacci(10));`,
           </div>
         </CardHeader>
         <CardContent>
-          <div className="relative">
-            <Textarea
+          {/* Scrollable container for horizontal + vertical sync */}
+          <div className="flex w-full border border-border/20 rounded-lg overflow-auto max-h-[500px]">
+            {/* Line Numbers (sticky on left, sync scroll vertically) */}
+            <div className="bg-muted/40 text-xs text-muted-foreground font-mono text-right pr-2 py-2 select-none sticky left-0 top-0 h-fit">
+              {code.split("\n").map((_, i) => (
+                <div key={i} className="leading-5">
+                  {i + 1}
+                </div>
+              ))}
+            </div>
+
+            {/* Code Area */}
+            <textarea
               value={code}
               onChange={(e) => {
                 setCode(e.target.value);
                 onCodeChange?.(e.target.value);
               }}
               placeholder="Paste your code here or start typing..."
-              className="min-h-[300px] font-mono text-sm bg-editor-bg text-editor-foreground border-border/20 resize-none"
-              style={{ 
-                background: 'hsl(var(--editor-bg))',
-                color: 'hsl(var(--editor-foreground))'
+              className="min-h-[300px] w-full font-mono text-sm bg-editor-bg text-editor-foreground resize-none outline-none p-2"
+              style={{
+                background: "hsl(var(--editor-bg))",
+                color: "hsl(var(--editor-foreground))",
               }}
             />
-            
-            {/* Line Numbers Overlay */}
-            <div className="absolute left-3 top-3 text-xs text-muted-foreground font-mono pointer-events-none">
-              {code.split('\n').map((_, i) => (
-                <div key={i} className="h-5 leading-5">
-                  {i + 1}
-                </div>
-              ))}
-            </div>
           </div>
         </CardContent>
       </Card>
@@ -212,3 +212,4 @@ console.log(fibonacci(10));`,
     </div>
   );
 };
+
