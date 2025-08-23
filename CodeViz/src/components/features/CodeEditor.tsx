@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import CodeMirror from '@uiw/react-codemirror';
 import { 
   Play, 
   Upload, 
@@ -18,6 +19,7 @@ import {
   Save
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getLanguageExtension, getLanguageInfo } from "@/lib/editor";
 
 const languages = [
   { id: "javascript", name: "JavaScript", color: "bg-yellow-500" },
@@ -159,7 +161,7 @@ console.log(fibonacci(10));`,
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="gap-1">
               <Palette className="h-3 w-3" />
-              Syntax Highlighting
+              {getLanguageInfo(selectedLanguage).displayName}
             </Badge>
             <Button variant="ghost" size="icon-sm">
               <Copy className="h-4 w-4" />
@@ -168,28 +170,29 @@ console.log(fibonacci(10));`,
         </CardHeader>
         <CardContent>
           <div className="relative">
-            <Textarea
+            <CodeMirror
               value={code}
-              onChange={(e) => {
-                setCode(e.target.value);
-                onCodeChange?.(e.target.value);
+              height="300px"
+              extensions={getLanguageExtension(selectedLanguage)}
+              onChange={(value) => {
+                setCode(value);
+                onCodeChange?.(value);
               }}
+              theme="dark"
+              basicSetup={{
+                lineNumbers: true,
+                foldGutter: true,
+                dropCursor: false,
+                allowMultipleSelections: false,
+                indentOnInput: true,
+                bracketMatching: true,
+                closeBrackets: true,
+                autocompletion: true,
+                highlightSelectionMatches: false
+              }}
+              className="text-sm font-mono"
               placeholder="Paste your code here or start typing..."
-              className="min-h-[300px] font-mono text-sm bg-editor-bg text-editor-foreground border-border/20 resize-none"
-              style={{ 
-                background: 'hsl(var(--editor-bg))',
-                color: 'hsl(var(--editor-foreground))'
-              }}
             />
-            
-            {/* Line Numbers Overlay */}
-            <div className="absolute left-3 top-3 text-xs text-muted-foreground font-mono pointer-events-none">
-              {code.split('\n').map((_, i) => (
-                <div key={i} className="h-5 leading-5">
-                  {i + 1}
-                </div>
-              ))}
-            </div>
           </div>
         </CardContent>
       </Card>
