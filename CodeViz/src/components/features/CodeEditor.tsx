@@ -2,13 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import CodeMirror from '@uiw/react-codemirror';
 import { 
   Play, 
   Upload, 
   Copy, 
-  Download, 
   Settings,
   FileText,
   Brain,
@@ -41,21 +39,27 @@ interface CodeEditorProps {
   initialLanguage?: string;
 }
 
-export const CodeEditor = ({ 
-  onCodeChange, 
-  onLanguageChange, 
-  initialCode = `// Welcome to CodeViz AI!
-function fibonacci(n) {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
-}
-
-console.log(fibonacci(10));`,
-  initialLanguage = "javascript"
+export const CodeEditor = ({
+  onCodeChange,
+  onLanguageChange,
+  initialCode = `// Welcome to CodeViz AI!\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nconsole.log(fibonacci(10));`,
+  initialLanguage = "javascript",
 }: CodeEditorProps = {}) => {
   const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
   const [selectedMode, setSelectedMode] = useState("simplified");
   const [code, setCode] = useState(initialCode);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopy = () => {
+    if (!navigator.clipboard) {
+      alert("Clipboard API not supported");
+      return;
+    }
+    navigator.clipboard.writeText(code).then(() => {
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -163,9 +167,18 @@ console.log(fibonacci(10));`,
               <Palette className="h-3 w-3" />
               {getLanguageInfo(selectedLanguage).displayName}
             </Badge>
-            <Button variant="ghost" size="icon-sm">
+            <Button 
+              variant="ghost" 
+              size="icon-sm" 
+              onClick={handleCopy} 
+              aria-label="Copy code to clipboard" 
+              title="Copy code"
+            >
               <Copy className="h-4 w-4" />
             </Button>
+            {copySuccess && (
+              <span className="text-sm text-green-500 ml-2 select-none">Copied!</span>
+            )}
           </div>
         </CardHeader>
         <CardContent>
