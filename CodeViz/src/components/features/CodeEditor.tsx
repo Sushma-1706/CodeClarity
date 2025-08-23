@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
+import { Textarea } from "@/components/ui/textarea";
+import CodeMirror from '@uiw/react-codemirror';
+
 import { 
   Play, 
   Upload, 
@@ -16,6 +20,7 @@ import {
   Save
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getLanguageExtension, getLanguageInfo } from "@/lib/editor";
 
 const languages = [
   { id: "javascript", name: "JavaScript", color: "bg-yellow-500" },
@@ -157,7 +162,7 @@ console.log(fibonacci(10));`,
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="gap-1">
               <Palette className="h-3 w-3" />
-              Syntax Highlighting
+              {getLanguageInfo(selectedLanguage).displayName}
             </Badge>
             <Button variant="ghost" size="icon-sm">
               <Copy className="h-4 w-4" />
@@ -165,6 +170,7 @@ console.log(fibonacci(10));`,
           </div>
         </CardHeader>
         <CardContent>
+
           {/* Scrollable container for horizontal + vertical sync */}
           <div className="flex w-full border border-border/20 rounded-lg overflow-auto max-h-[500px]">
             {/* Line Numbers (sticky on left, sync scroll vertically) */}
@@ -178,17 +184,39 @@ console.log(fibonacci(10));`,
 
             {/* Code Area */}
             <textarea
+
+          <div className="relative">
+            <CodeMirror
+
               value={code}
-              onChange={(e) => {
-                setCode(e.target.value);
-                onCodeChange?.(e.target.value);
+              height="300px"
+              extensions={getLanguageExtension(selectedLanguage)}
+              onChange={(value) => {
+                setCode(value);
+                onCodeChange?.(value);
               }}
+
               placeholder="Paste your code here or start typing..."
               className="min-h-[300px] w-full font-mono text-sm bg-editor-bg text-editor-foreground resize-none outline-none p-2"
               style={{
                 background: "hsl(var(--editor-bg))",
                 color: "hsl(var(--editor-foreground))",
+
+              theme="dark"
+              basicSetup={{
+                lineNumbers: true,
+                foldGutter: true,
+                dropCursor: false,
+                allowMultipleSelections: false,
+                indentOnInput: true,
+                bracketMatching: true,
+                closeBrackets: true,
+                autocompletion: true,
+                highlightSelectionMatches: false
+
               }}
+              className="text-sm font-mono"
+              placeholder="Paste your code here or start typing..."
             />
           </div>
         </CardContent>
