@@ -35,7 +35,7 @@ interface CodeEditorProps {
   onLanguageChange?: (language: string) => void;
   initialCode?: string;
   initialLanguage?: string;
-}
+} 
 
 export const CodeEditor = ({ 
   onCodeChange, 
