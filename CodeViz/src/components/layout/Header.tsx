@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { 
-  Code, 
-  Brain, 
-  Sparkles, 
-  Menu,
-  X,
-  Settings,
-  User,
-  Bell
-} from "lucide-react";
+import { useDarkMode } from "@/hooks/useDarkMode";
+
+import { Sun, Moon, Code, Brain, Sparkles, Menu, X, Settings, User, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [darkMode, toggleDarkMode] = useDarkMode();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/80 backdrop-blur-xl">
@@ -55,9 +48,23 @@ export const Header = () => {
             <Bell className="h-4 w-4" />
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-accent rounded-full animate-pulse" />
           </Button>
-          
-          <ModeToggle />
-          
+
+          {/* Dark/Light Mode Toggle Button */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={toggleDarkMode}
+            aria-label="Toggle dark mode"
+            title="Toggle dark mode"
+            className="flex items-center"
+          >
+            {darkMode ? (
+              <Sun className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <Moon className="h-5 w-5 text-gray-700" />
+            )}
+          </Button>
+
           <Button variant="secondary" size="sm" className="gap-2">
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Sign In</span>
@@ -69,6 +76,7 @@ export const Header = () => {
             size="icon-sm"
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
@@ -76,10 +84,12 @@ export const Header = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <div className={cn(
-        "md:hidden border-t border-border/20 bg-background/95 backdrop-blur-xl",
-        isMenuOpen ? "block animate-slide-up" : "hidden"
-      )}>
+      <div
+        className={cn(
+          "md:hidden border-t border-border/20 bg-background/95 backdrop-blur-xl",
+          isMenuOpen ? "block animate-slide-up" : "hidden"
+        )}
+      >
         <nav className="container p-4 space-y-3">
           <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
             <Code className="h-4 w-4" />
