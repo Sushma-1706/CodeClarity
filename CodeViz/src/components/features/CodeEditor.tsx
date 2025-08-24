@@ -18,7 +18,7 @@ import {
   Moon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getLanguageExtension, getLanguageInfo } from "@/lib/editor";
+import { getLanguageExtension, getLanguageInfo, getLanguageBoilerplate } from "@/lib/editor";
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 
@@ -58,6 +58,23 @@ console.log(fibonacci(10));`,
   const [selectedMode, setSelectedMode] = useState("simplified");
   const [code, setCode] = useState(initialCode);
   const [darkMode, setDarkMode] = useState(true); // 🌙 Default Dark Theme
+
+  // Replace boilerplate only when the current editor content equals the
+  // default boilerplate for the previous language. This avoids overwriting
+  // user edits while still providing helpful templates for new users.
+  const handleLanguageChange = (langId: string) => {
+    const prevTemplate = getLanguageBoilerplate(selectedLanguage);
+    const newTemplate = getLanguageBoilerplate(langId);
+
+    // If the user hasn't modified the previous template, swap in the new one
+    if (code.trim() === prevTemplate.trim()) {
+      setCode(newTemplate);
+      onCodeChange?.(newTemplate);
+    }
+
+    setSelectedLanguage(langId);
+    onLanguageChange?.(langId);
+  };
 
   return (
     <div className="space-y-6">
@@ -120,10 +137,7 @@ console.log(fibonacci(10));`,
               {languages.map((lang) => (
                 <button
                   key={lang.id}
-                  onClick={() => {
-                    setSelectedLanguage(lang.id);
-                    onLanguageChange?.(lang.id);
-                  }}
+                  onClick={() => handleLanguageChange(lang.id)}
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2",
                     selectedLanguage === lang.id
