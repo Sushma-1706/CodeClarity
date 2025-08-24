@@ -2,10 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-import { Textarea } from "@/components/ui/textarea";
-import CodeMirror from '@uiw/react-codemirror';
-
 import { 
   Play, 
   Upload, 
@@ -17,10 +13,14 @@ import {
   Zap,
   Code2,
   Palette,
-  Save
+  Save,
+  Sun,
+  Moon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLanguageExtension, getLanguageInfo } from "@/lib/editor";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 
 const languages = [
   { id: "javascript", name: "JavaScript", color: "bg-yellow-500" },
@@ -42,7 +42,7 @@ interface CodeEditorProps {
   initialLanguage?: string;
 } 
 
-export const CodeEditor = ({ 
+export const CodeEditor = ({
   onCodeChange, 
   onLanguageChange, 
   initialCode = `// Welcome to CodeViz AI!
@@ -52,11 +52,12 @@ function fibonacci(n) {
 }
 
 console.log(fibonacci(10));`,
-  initialLanguage = "javascript"
-}: CodeEditorProps = {}) => {
+  initialLanguage = "javascript",
+}: CodeEditorProps) => {
   const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
   const [selectedMode, setSelectedMode] = useState("simplified");
   const [code, setCode] = useState(initialCode);
+  const [darkMode, setDarkMode] = useState(true); // 🌙 Default Dark Theme
 
   return (
     <div className="space-y-6">
@@ -79,6 +80,26 @@ console.log(fibonacci(10));`,
           <Button variant="secondary" size="sm" className="gap-2">
             <Settings className="h-4 w-4" />
             Settings
+          </Button>
+
+          {/* 🌙 / ☀️ Theme Toggle */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="gap-2"
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            {darkMode ? (
+              <>
+                <Sun className="h-4 w-4 text-yellow-400" />
+                Light Mode
+              </>
+            ) : (
+              <>
+                <Moon className="h-4 w-4 text-blue-400" />
+                Dark Mode
+              </>
+            )}
           </Button>
         </div>
       </div>
@@ -170,24 +191,8 @@ console.log(fibonacci(10));`,
           </div>
         </CardHeader>
         <CardContent>
-
-          {/* Scrollable container for horizontal + vertical sync */}
-          <div className="flex w-full border border-border/20 rounded-lg overflow-auto max-h-[500px]">
-            {/* Line Numbers (sticky on left, sync scroll vertically) */}
-            <div className="bg-muted/40 text-xs text-muted-foreground font-mono text-right pr-2 py-2 select-none sticky left-0 top-0 h-fit">
-              {code.split("\n").map((_, i) => (
-                <div key={i} className="leading-5">
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-
-            {/* Code Area */}
-            <textarea
-
-          <div className="relative">
+          <div className="border border-border/20 rounded-lg overflow-hidden">
             <CodeMirror
-
               value={code}
               height="300px"
               extensions={getLanguageExtension(selectedLanguage)}
@@ -195,27 +200,18 @@ console.log(fibonacci(10));`,
                 setCode(value);
                 onCodeChange?.(value);
               }}
-
-              placeholder="Paste your code here or start typing..."
-              className="min-h-[300px] w-full font-mono text-sm bg-editor-bg text-editor-foreground resize-none outline-none p-2"
-              style={{
-                background: "hsl(var(--editor-bg))",
-                color: "hsl(var(--editor-foreground))",
-
-              theme="dark"
+              theme={darkMode ? vscodeDark : vscodeLight} // 🌙/☀️ toggle
               basicSetup={{
                 lineNumbers: true,
                 foldGutter: true,
-                dropCursor: false,
-                allowMultipleSelections: false,
+                dropCursor: true,
+                allowMultipleSelections: true,
                 indentOnInput: true,
                 bracketMatching: true,
                 closeBrackets: true,
                 autocompletion: true,
-                highlightSelectionMatches: false
-
+                highlightSelectionMatches: true,
               }}
-              className="text-sm font-mono"
               placeholder="Paste your code here or start typing..."
             />
           </div>
@@ -240,4 +236,3 @@ console.log(fibonacci(10));`,
     </div>
   );
 };
-
