@@ -3,6 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} 
+from "@/components/ui/select";
 import { 
   GitBranch,
   TestTube,
@@ -16,12 +24,16 @@ import {
   Download,
   Share2,
   Bookmark,
-  Tag
+  Tag,
+  Code,
+  FileCode
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { codeExamples } from "@/data/examples";
 
 // Tools
 const tools = [
+  { id: "examples", name: "Code Examples", icon: FileCode, description: "Load pre-built examples", status: "active" },
   { id: "sandbox", name: "Live Sandbox", icon: TestTube, description: "Execute code safely", status: "ready" },
   { id: "version-compare", name: "Version Compare", icon: ArrowLeftRight, description: "Track code changes", status: "active" },
   { id: "refactor", name: "Code Refactor", icon: RefreshCw, description: "Optimize performance", status: "ready" },
@@ -52,7 +64,11 @@ const quizQuestions = [
   },
 ];
 
-export const ToolsPanel = () => {
+interface ToolsPanelProps {
+  onExampleLoad?: (code: string, language: string) => void;
+}
+
+export const ToolsPanel = ({ onExampleLoad }: ToolsPanelProps = {}) => {
   const [activeTab, setActiveTab] = useState("tools");
   const [quizOpen, setQuizOpen] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number | null }>({});
@@ -66,21 +82,49 @@ export const ToolsPanel = () => {
           <p className="text-muted-foreground">Advanced features for code analysis</p>
         </div>
 
-        <div className="flex items-center gap-2">
-          {["tools", "history", "tags"].map((tab) => (
-            <Button
-              key={tab}
-              variant={activeTab === tab ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setActiveTab(tab)}
-              className="capitalize"
+        <div className="flex items-center gap-4">
+          {/* Load Example Dropdown - Allows users to select pre-written code examples */}
+          <div className="w-[220px]">
+            <Select
+              onValueChange={(value) => {
+                const example = codeExamples.find(ex => ex.id === value);
+                if (example && onExampleLoad) {
+                  onExampleLoad(example.code, example.language);
+                }
+              }}
             >
-              {tab === "tools" && <TestTube className="h-4 w-4 mr-2" />}
-              {tab === "history" && <History className="h-4 w-4 mr-2" />}
-              {tab === "tags" && <Tag className="h-4 w-4 mr-2" />}
-              {tab}
-            </Button>
-          ))}
+              <SelectTrigger className="w-full">
+                <div className="flex items-center gap-2">
+                  <FileCode className="h-4 w-4 text-muted-foreground" />
+                  <SelectValue placeholder="Load Example" />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                {codeExamples.map((example) => (
+                  <SelectItem key={example.id} value={example.id}>
+                    {example.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {["tools", "history", "tags"].map((tab) => (
+              <Button
+                key={tab}
+                variant={activeTab === tab ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setActiveTab(tab)}
+                className="capitalize"
+              >
+                {tab === "tools" && <TestTube className="h-4 w-4 mr-2" />}
+                {tab === "history" && <History className="h-4 w-4 mr-2" />}
+                {tab === "tags" && <Tag className="h-4 w-4 mr-2" />}
+                {tab}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -114,6 +158,12 @@ export const ToolsPanel = () => {
                     onClick={() => {
                       if (tool.id === "quiz") {
                         setQuizOpen(true);
+                      } else if (tool.id === "examples") {
+                        // Use a default example as a fallback if onExampleLoad is provided
+                        const defaultExample = codeExamples[0];
+                        if (onExampleLoad && defaultExample) {
+                          onExampleLoad(defaultExample.code, defaultExample.language);
+                        }
                       }
                     }}
                   >
