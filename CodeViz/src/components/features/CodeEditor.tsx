@@ -76,6 +76,20 @@ console.log(fibonacci(10));`,
     onLanguageChange?.(langId);
   };
 
+const handleAnalyze = () => {
+  // Save current code to history
+  let history = JSON.parse(localStorage.getItem("analysisHistory")) || [];
+  history.push({
+    code,
+    language: selectedLanguage,
+    timestamp: new Date().toLocaleString()
+  });
+  localStorage.setItem("analysisHistory", JSON.stringify(history));
+
+  // Later, also call backend/analysis logic here
+  onCodeChange?.(code); 
+};
+
   return (
     <div className="space-y-6">
       {/* Controls Header */}
@@ -234,7 +248,7 @@ console.log(fibonacci(10));`,
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3">
-        <Button variant="gradient" size="lg" className="gap-2 flex-1">
+        <Button variant="gradient" size="lg" className="gap-2 flex-1" onClick={handleAnalyze}>
           <Zap className="h-5 w-5" />
           Analyze & Explain Code
         </Button>
