@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,9 @@ import {
   Palette,
   Save,
   Sun,
-  Moon
+  Moon,
+  Maximize2,
+  X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLanguageExtension, getLanguageInfo, getLanguageBoilerplate } from "@/lib/editor";
@@ -58,6 +60,37 @@ console.log(fibonacci(10));`,
   const [selectedMode, setSelectedMode] = useState("simplified");
   const [code, setCode] = useState(initialCode);
   const [darkMode, setDarkMode] = useState(true); // 🌙 Default Dark Theme
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const editorCardRef = useRef<HTMLDivElement | null>(null);
+
+  // Sync with browser fullscreen and toggle distraction-free mode
+  useEffect(() => {
+    const onFsChange = () => {
+      const active = document.fullscreenElement === editorCardRef.current;
+      setIsFullscreen(active);
+      const root = document.documentElement;
+      if (active) root.classList.add("no-notifications");
+      else root.classList.remove("no-notifications");
+    };
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFsChange);
+      document.documentElement.classList.remove("no-notifications");
+    };
+  }, []);
+
+  const enterFullscreen = async () => {
+    const el = editorCardRef.current as unknown as HTMLElement | null;
+    if (el && el.requestFullscreen) {
+      try { await el.requestFullscreen(); } catch {}
+    }
+  };
+
+  const exitFullscreen = async () => {
+    if (document.fullscreenElement) {
+      try { await document.exitFullscreen(); } catch {}
+    }
+  };
 
   // Replace boilerplate only when the current editor content equals the
   // default boilerplate for the previous language. This avoids overwriting
@@ -202,7 +235,7 @@ const handleAnalyze = () => {
       </Card>
 
       {/* Code Editor */}
-      <Card className="glass">
+      <Card ref={editorCardRef} className="glass">
         <CardHeader className="flex flex-row items-center justify-between pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <FileText className="h-5 w-5 text-accent" />
@@ -213,16 +246,43 @@ const handleAnalyze = () => {
               <Palette className="h-3 w-3" />
               {getLanguageInfo(selectedLanguage).displayName}
             </Badge>
-            <Button variant="ghost" size="icon-sm">
+            <Button 
+              variant="ghost" 
+              size="icon-sm"
+              onClick={() => navigator.clipboard.writeText(code)}
+              title="Copy code"
+            >
               <Copy className="h-4 w-4" />
             </Button>
+            {isFullscreen ? (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={exitFullscreen}
+                title="Exit full screen (Esc)"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={enterFullscreen}
+                title="Full screen"
+              >
+                <Maximize2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="border border-border/20 rounded-lg overflow-hidden">
+        <CardContent className={cn(isFullscreen && "h-[calc(100vh-10rem)] flex flex-col")}> 
+          <div className={cn(
+            "border border-border/20 rounded-lg overflow-hidden",
+            isFullscreen ? "flex-1" : ""
+          )}>
             <CodeMirror
               value={code}
-              height="300px"
+              height={isFullscreen ? "100%" : "300px"}
               extensions={getLanguageExtension(selectedLanguage)}
               onChange={(value) => {
                 setCode(value);
