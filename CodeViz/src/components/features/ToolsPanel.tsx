@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import HistoryPanel from "./HistoryPanel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -263,6 +264,11 @@ export const ToolsPanel = ({ onExampleLoad }: ToolsPanelProps = {}) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {/* History Tab */}
+      {activeTab === "history" && (
+        <HistoryPanel />
+      )}
+      
     </div>
   );
 };
