@@ -71,6 +71,7 @@ interface ToolsPanelProps {
 export const ToolsPanel = ({ onExampleLoad }: ToolsPanelProps = {}) => {
   const [activeTab, setActiveTab] = useState("tools");
   const [quizOpen, setQuizOpen] = useState(false);
+  const [versionCompareOpen, setVersionCompareOpen] = useState(false); // NEW STATE
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number | null }>({});
 
   return (
@@ -165,6 +166,9 @@ export const ToolsPanel = ({ onExampleLoad }: ToolsPanelProps = {}) => {
                           onExampleLoad(defaultExample.code, defaultExample.language);
                         }
                       }
+                      if (tool.id === "version-compare") {
+                        setVersionCompareOpen(true);
+                      }
                     }}
                   >
                     Launch Tool
@@ -175,6 +179,32 @@ export const ToolsPanel = ({ onExampleLoad }: ToolsPanelProps = {}) => {
           })}
         </div>
       )}
+
+      {/* Version Compare Modal */}
+      <Dialog
+        open={versionCompareOpen}
+        onOpenChange={(open) => setVersionCompareOpen(open)}
+      >
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Version Compare</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {codeVersions.map((ver, idx) => (
+              <div key={ver.version} className="border rounded p-3 flex flex-col gap-1">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">{ver.version}</span>
+                  <span className="text-xs text-muted-foreground">{ver.timestamp}</span>
+                </div>
+                <span className="text-sm">{ver.changes}</span>
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setVersionCompareOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Quiz Modal */}
       <Dialog
