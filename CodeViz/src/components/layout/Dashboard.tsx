@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Badge, badgeVariants } from "@/components/ui/badge";
 import { Header } from "./Header";
 import { CodeEditor } from "../features/CodeEditor";
 import { VisualizationPanel } from "../features/VisualizationPanel";
@@ -22,7 +22,8 @@ import {
   Minimize2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import heroImage from "@/assets/hero-bg.jpg";
+// Using a relative import approach instead
+// import heroImage from "@/assets/hero-bg.jpg";
 
 const tabs = [
   { id: "editor", name: "Code Editor", icon: Code, component: CodeEditor },
@@ -63,7 +64,7 @@ console.log(fibonacci(10));`);
       <div className="relative h-32 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
+          style={{ backgroundImage: `url('/src/assets/hero-bg.jpg')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/90" />
         <div className="relative h-full flex items-center justify-center">
@@ -120,9 +121,9 @@ console.log(fibonacci(10));`);
                           <span className="font-medium">{tab.name}</span>
                         )}
                         {!sidebarCollapsed && isActive && (
-                          <Badge variant="outline" className="ml-auto">
+                          <div className={cn(badgeVariants({ variant: "outline" }), "ml-auto")}>
                             Active
-                          </Badge>
+                          </div>
                         )}
                       </button>
                     );
@@ -135,7 +136,7 @@ console.log(fibonacci(10));`);
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">Status</span>
-                        <Badge variant="secondary" className="text-xs">Ready</Badge>
+                        <div className={cn(badgeVariants({ variant: "secondary" }), "text-xs")}>Ready</div>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">AI Engine</span>
@@ -196,8 +197,14 @@ console.log(fibonacci(10));`);
                 <PatternRecognitionPanel code={currentCode} language={currentLanguage} />
               ) : activeTab === "ml-insights" ? (
                 <MLInsightsPanel code={currentCode} language={currentLanguage} />
+              ) : activeTab === "tools" ? (
+                <ToolsPanel onExampleLoad={(code, language) => {
+                  setCurrentCode(code);
+                  setCurrentLanguage(language);
+                  setActiveTab("editor"); // Switch to editor after loading example
+                }} />
               ) : (
-                <ActiveComponent />
+                <ActiveComponent code={currentCode} language={currentLanguage} />
               )}
             </div>
           </main>
