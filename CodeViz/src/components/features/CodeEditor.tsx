@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CodeSandbox } from '@/utils/sandbox';
 import { 
   Play, 
   Upload, 
@@ -21,6 +22,7 @@ import {
 import { parseCodeError, CodeError } from "@/utils/errorHandler";
 import ErrorDisplay from "@/components/ErrorDisplay";
 import ActionButtons from "./ActionButtons";
+import OutputDisplay from "./OutputDisplay";
 import { cn } from "@/lib/utils";
 import { getLanguageExtension, getLanguageInfo, getLanguageBoilerplate } from "@/lib/editor";
 import CodeMirror from "@uiw/react-codemirror";
@@ -49,6 +51,7 @@ interface CodeEditorProps {
 interface CodeExecutionState {
   error?: CodeError;
   executing: boolean;
+  output?: string;
 }
 
 export const CodeEditor = ({
@@ -93,32 +96,41 @@ num.toLowerCase()`,
     onLanguageChange?.(langId);
   };
 
-const handleAnalyze = async () => {
-  try {
-    setExecutionState({ executing: true, error: undefined });
 
-    // Basic syntax validation
-    if (selectedLanguage === "javascript") {
-      try {
-        new Function(code);
-      } catch (e) {
-        throw e;
-      }
-    } else if (selectedLanguage === "python") {
-      // Check for common Python syntax issues
-      const lines = code.split('\n');
-      lines.forEach((line, index) => {
-        // Check for missing colons in control structures
-        if (line.trim().match(/^(if|for|while|def|class)\s+.*[^\s:]$/)) {
-          throw new SyntaxError(`Missing colon after control statement at line ${index + 1}`);
-        }
-        
-        // Check for indentation errors
-        if (line.match(/^\s+/) && !line.match(/^(\s{2}|\s{4}|\t)+/)) {
-          throw new Error(`Inconsistent indentation at line ${index + 1}`);
-        }
-      });
+
+const sandbox = new CodeSandbox();
+
+const executeCode = async (code: string, language: string) => {
+  try {
+    if (language === "javascript") {
+      const result = await sandbox.executeJavaScript(code);
+      return result;
+    } else if (language === "python") {
+      const result = await sandbox.executePython(code);
+      return result;
     }
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+const handleAnalyze = async () => {
+  const sandbox = new CodeSandbox();
+  try {
+    setExecutionState({ executing: true, error: undefined, output: undefined });
+    
+    let result;
+    if (selectedLanguage === "javascript") {
+      result = await sandbox.executeJavaScript(code);
+    } else if (selectedLanguage === "python") {
+      result = await sandbox.executePython(code);
+    }
+    
+    setExecutionState(prev => ({ 
+      ...prev, 
+      executing: false,
+      output: typeof result === 'string' ? result : JSON.stringify(result, null, 2)
+    }));
 
     // Save current code to history
     let history = JSON.parse(localStorage.getItem("analysisHistory")) || [];
@@ -145,10 +157,22 @@ const handleAnalyze = async () => {
     <div className="space-y-6">
       {/* Error Display */}
       {executionState.error && (
-        <ErrorDisplay 
-          error={executionState.error} 
-          className="mb-4"
-        />
+        <div className="mb-4 animate-in fade-in-50 duration-300">
+          <ErrorDisplay 
+            error={executionState.error} 
+            className="shadow-lg"
+          />
+        </div>
+      )}
+      
+      {/* Output Display */}
+      {executionState.output && (
+        <div className="mb-4 animate-in fade-in-50 duration-300">
+          <OutputDisplay 
+            output={executionState.output}
+            className="shadow-lg" 
+          />
+        </div>
       )}
 
       {/* Controls Header */}
