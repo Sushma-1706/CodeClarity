@@ -34,20 +34,20 @@ export const Header = () => {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          <Button variant="ghost" size="sm" className="gap-2">
-            <Code className="h-4 w-4" />
-            Editor
-          </Button>
-          <Button variant="ghost" size="sm" className="gap-2">
-            <Sparkles className="h-4 w-4" />
-            Visualize
-          </Button>
-          <Button variant="ghost" size="sm" className="gap-2">
-            <Brain className="h-4 w-4" />
-            Explain
-          </Button>
-        </nav>
+      <nav className="hidden md:flex items-center gap-8 ">
+  <Button variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
+    <Code className="h-5 w-5" />
+    Editor
+  </Button>
+  <Button variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
+    <Sparkles className="h-5 w-5" />
+    Visualize
+  </Button>
+  <Button variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
+    <Brain className="h-5 w-5" />
+    Explain
+  </Button>
+</nav>
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-3">
@@ -76,29 +76,29 @@ export const Header = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <div className={cn(
-        "md:hidden border-t border-border/20 bg-background/95 backdrop-blur-xl",
-        isMenuOpen ? "block animate-slide-up" : "hidden"
-      )}>
-        <nav className="container p-4 space-y-3">
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
-            <Code className="h-4 w-4" />
-            Editor
-          </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
-            <Sparkles className="h-4 w-4" />
-            Visualize
-          </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
-            <Brain className="h-4 w-4" />
-            Explain
-          </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
-            <Settings className="h-4 w-4" />
-            Settings
-          </Button>
-        </nav>
-      </div>
+    <div className={cn(
+  "md:hidden border-t border-border/20 bg-background/95 backdrop-blur-xl",
+  isMenuOpen ? "block animate-slide-up" : "hidden"
+)}>
+  <nav className="container p-4 space-y-4">
+    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Code className="h-5 w-5" />
+      Editor
+    </Button>
+    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Sparkles className="h-5 w-5" />
+      Visualize
+    </Button>
+    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Brain className="h-5 w-5" />
+      Explain
+    </Button>
+    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Settings className="h-5 w-5" />
+      Settings
+    </Button>
+  </nav>
+</div>
     </header>
   );
 };
