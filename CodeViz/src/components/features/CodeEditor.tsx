@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CodeSandbox } from '@/utils/sandbox';
 import { 
   Play, 
   Upload, 
@@ -15,8 +16,13 @@ import {
   Palette,
   Save,
   Sun,
-  Moon
+  Moon,
+  AlertCircle
 } from "lucide-react";
+import { parseCodeError, CodeError } from "@/utils/errorHandler";
+import ErrorDisplay from "@/components/ErrorDisplay";
+import ActionButtons from "./ActionButtons";
+import OutputDisplay from "./OutputDisplay";
 import { cn } from "@/lib/utils";
 import { getLanguageExtension, getLanguageInfo, getLanguageBoilerplate } from "@/lib/editor";
 import CodeMirror from "@uiw/react-codemirror";
@@ -42,22 +48,36 @@ interface CodeEditorProps {
   initialLanguage?: string;
 } 
 
+interface CodeExecutionState {
+  error?: CodeError;
+  executing: boolean;
+  output?: string;
+}
+
 export const CodeEditor = ({
   onCodeChange, 
   onLanguageChange, 
-  initialCode = `// Welcome to CodeViz AI!
-function fibonacci(n) {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
-}
+  initialCode = `// Test Cases for Error Handling
+// 1. Syntax Error (Missing colon)
+for i in range(10)
+    print(i)
 
-console.log(fibonacci(10));`,
+// 2. Reference Error (Undefined variable)
+console.log(undefinedVariable)
+
+// 3. Type Error
+let num = 42
+num.toLowerCase()`,
   initialLanguage = "javascript",
 }: CodeEditorProps) => {
   const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
   const [selectedMode, setSelectedMode] = useState("simplified");
   const [code, setCode] = useState(initialCode);
   const [darkMode, setDarkMode] = useState(true); // 🌙 Default Dark Theme
+  const [executionState, setExecutionState] = useState<CodeExecutionState>({
+    executing: false,
+    error: undefined
+  });
 
   // Replace boilerplate only when the current editor content equals the
   // default boilerplate for the previous language. This avoids overwriting
@@ -76,22 +96,85 @@ console.log(fibonacci(10));`,
     onLanguageChange?.(langId);
   };
 
-const handleAnalyze = () => {
-  // Save current code to history
-  let history = JSON.parse(localStorage.getItem("analysisHistory")) || [];
-  history.push({
-    code,
-    language: selectedLanguage,
-    timestamp: new Date().toLocaleString()
-  });
-  localStorage.setItem("analysisHistory", JSON.stringify(history));
 
-  // Later, also call backend/analysis logic here
-  onCodeChange?.(code); 
+
+const sandbox = new CodeSandbox();
+
+const executeCode = async (code: string, language: string) => {
+  try {
+    if (language === "javascript") {
+      const result = await sandbox.executeJavaScript(code);
+      return result;
+    } else if (language === "python") {
+      const result = await sandbox.executePython(code);
+      return result;
+    }
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+const handleAnalyze = async () => {
+  const sandbox = new CodeSandbox();
+  try {
+    setExecutionState({ executing: true, error: undefined, output: undefined });
+    
+    let result;
+    if (selectedLanguage === "javascript") {
+      result = await sandbox.executeJavaScript(code);
+    } else if (selectedLanguage === "python") {
+      result = await sandbox.executePython(code);
+    }
+    
+    setExecutionState(prev => ({ 
+      ...prev, 
+      executing: false,
+      output: typeof result === 'string' ? result : JSON.stringify(result, null, 2)
+    }));
+
+    // Save current code to history
+    let history = JSON.parse(localStorage.getItem("analysisHistory")) || [];
+    history.push({
+      code,
+      language: selectedLanguage,
+      timestamp: new Date().toLocaleString()
+    });
+    localStorage.setItem("analysisHistory", JSON.stringify(history));
+
+    // Call backend/analysis logic here
+    onCodeChange?.(code);
+    setExecutionState({ executing: false, error: undefined });
+  } catch (error: any) {
+    const parsedError = parseCodeError(error, selectedLanguage);
+    setExecutionState({
+      executing: false,
+      error: parsedError
+    });
+  }
 };
 
   return (
     <div className="space-y-6">
+      {/* Error Display */}
+      {executionState.error && (
+        <div className="mb-4 animate-in fade-in-50 duration-300">
+          <ErrorDisplay 
+            error={executionState.error} 
+            className="shadow-lg"
+          />
+        </div>
+      )}
+      
+      {/* Output Display */}
+      {executionState.output && (
+        <div className="mb-4 animate-in fade-in-50 duration-300">
+          <OutputDisplay 
+            output={executionState.output}
+            className="shadow-lg" 
+          />
+        </div>
+      )}
+
       {/* Controls Header */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="space-y-2">
@@ -99,40 +182,12 @@ const handleAnalyze = () => {
           <p className="text-muted-foreground">Write or paste your code here</p>
         </div>
         
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Upload className="h-4 w-4" />
-            Upload File
-          </Button>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Save className="h-4 w-4" />
-            Save
-          </Button>
-          <Button variant="secondary" size="sm" className="gap-2">
-            <Settings className="h-4 w-4" />
-            Settings
-          </Button>
-
-          {/* 🌙 / ☀️ Theme Toggle */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="gap-2"
-            onClick={() => setDarkMode(!darkMode)}
-          >
-            {darkMode ? (
-              <>
-                <Sun className="h-4 w-4 text-yellow-400" />
-                Light Mode
-              </>
-            ) : (
-              <>
-                <Moon className="h-4 w-4 text-blue-400" />
-                Dark Mode
-              </>
-            )}
-          </Button>
-        </div>
+        <ActionButtons 
+          darkMode={darkMode}
+          executing={executionState.executing}
+          onAnalyze={handleAnalyze}
+          onDarkModeToggle={() => setDarkMode(!darkMode)}
+        />
       </div>
 
       {/* Language Selection */}
