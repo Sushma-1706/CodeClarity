@@ -1,3 +1,8 @@
+> ⭐ Star this repository to help the project grow and attract contributors!
+> 
+[![OSCI-Project-Banner.png](https://i.postimg.cc/76mJvBmF/OSCI-Project-Banner.png)](https://postimg.cc/8JfzMb84)
+---
+
 <div align="center">
   <h1><b>CodeClarity</b></h1>   
 
