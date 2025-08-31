@@ -43,27 +43,32 @@ It can:
 
 ## ✨ Features
 
- 🧠 **Multi-level code explanation** (kids to advanced learners)
+ ### 🧠 Code Understanding  
+- **Multi-level explanations** – Tailored for beginners, students, and advanced learners.  
+- **“Why?” mode** – Line-by-line or block-level reasoning behind the code.  
+- **Real-world analogies** – Simplifies abstract concepts with relatable examples.  
+
+ ### 🎨 Visualization  
+- **Interactive flowcharts & diagrams** – Auto-generated from logic and structure.  
+- **3D data structure models** – Arrays, matrices, trees, and graphs visualized in 3D.  
+- **Export-ready visuals** – Save diagrams, charts, and summaries for reports or study.  
  
- 🔍 **"Why?" mode** for line/block explanation
+ ### 📚 Learning Tools 
+
+- **Auto-generated quizzes & test cases generator** – Reinforce understanding instantly. 
  
- 🎞️ **Interactive flowcharts and 3D visuals** of logic & data structures
+ ### ⚙️ Execution & Analysis  
+- **Secure sandbox** – Step-by-step real-time execution with variable tracking.  
+- **Complexity analysis** – Automatic time & space complexity insights.  
+- **Smart debugging & refactoring suggestions** – Detects bugs, suggests fixes, and optimizations. 
  
- 🎙️ **Voice-based narration** of code
- 
- 🧪 **Secure sandbox** for real-time execution and variable tracking
- 
- 📊 **Complexity analysis** (time & space)
- 
- 🛠️ **Smart code fixes and refactor suggestions**
- 
- 🧩 **Auto quiz + test case generator**
- 
- 📤 **Export** visuals, diagrams, summaries
- 
- 💬 **Real-world analogies** for better understanding
- 
- 🔗 **GitHub repo import and version tracking**
+ ### 🌍 Accessibility & Sharing  
+- **🎙️ Voice narration** – Natural speech explanations for auditory learners.  
+- **📤 Export** – Save visuals, diagrams, and summaries for reports or study.  
+
+  ### 🔗 Integrations  
+- **GitHub import** – Analyze code directly from repositories.  
+- **Version tracking** – Monitor and compare code evolution over time.
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
