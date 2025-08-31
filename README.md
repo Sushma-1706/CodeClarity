@@ -142,8 +142,7 @@ You can use, modify, and distribute this project freely, but attribution is requ
 
 ```
 ## 📄 License
-This project is licensed under the MIT License. See [MIT License][License.md]for details.
-
+This project is licensed under the MIT License. See [MIT License](License.md) for details.
 
 
 <h3 align="center">Show some &nbsp;❤️&nbsp; by &nbsp;🌟&nbsp; this repository!</h3>
