@@ -94,17 +94,17 @@ You can contribute in two ways:
 2. **Submit a Pull Request (PR)** – Fork the repository, implement changes in a feature branch, and submit a Pull Request (PR) for review.  
 
 **Quick PR steps**
-# 1. Fork this repository and clone your fork
 ```bash
+# 1. Fork this repository and clone your fork
 fork → git clone     
 cd CodeClarity
 ```
-# 2. Create a new branch
 ```bash
+# 2. Create a new branch
 git checkout -b feature/your-feature-name
 ```
-# 3. Make your edits
 ```bash
+# 3. Make your edits
 git add .
 git commit -m "Commit Message Here"
 ```
@@ -113,6 +113,7 @@ git commit -m "Commit Message Here"
 git push -u origin feature/your-feature-name
 ```bash
 # 5. Open a PR from your fork
+
 ```
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
