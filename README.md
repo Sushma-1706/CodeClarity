@@ -98,17 +98,20 @@ You can contribute in two ways:
 # 1. Fork this repository and clone your fork
 fork → git clone     
 cd CodeClarity
-
+```
+```bash
 # 2. Create a new branch
 git checkout -b feature/your-feature-name
-
+```
+```bash
 # 3. Make your edits
 git add .
 git commit -m "Commit Message Here"
-
+```
+```bash
 # 4. Push your branch and open a PR
 git push -u origin feature/your-feature-name
-
+```bash
 # 5. Open a PR from your fork
 ```
 
