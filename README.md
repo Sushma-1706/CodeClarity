@@ -24,9 +24,9 @@
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
-## 💡 Full Project Vision
+## 💡 Project Overview
 
-Build an intelligent AI-powered web platform that accepts both pasted code snippets and uploaded text/code files in multiple programming languages including C, C++, Python, Java, and JavaScript, and generates detailed, easy-to-understand code explanations.
+**CodeClarity** is an intelligent AI-powered web platform that supports multiple programming languages (C, C++, Python, Java, JavaScript) and generates detailed, easy-to-understand code explanations.
 
 The platform supports multiple comprehension levels (e.g., for 10-year-olds or 20-year-olds), making it accessible to all kinds of learners. It visualizes logic and flow with animated flowcharts, 3D models for arrays/matrices/trees/graphs, and includes a “Why?” mode for line-by-line explanations.
 
