@@ -41,6 +41,10 @@ It can:
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
+## 🌐 Overview
+**CodeClarity** is an intelligent AI-powered web platform that supports multiple programming languages (C, C++, Python, Java, JavaScript).  
+It explains code in plain language, generates visuals for logic, and makes debugging & learning **interactive and fun**.
+
 ## ✨ Features
 
  🧠 **Multi-level code explanation** (kids to advanced learners)
