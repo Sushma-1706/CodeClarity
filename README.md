@@ -93,18 +93,23 @@ You can contribute in two ways:
 1. **Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues)** – Describe the suggestion, bug, or improvement with clear expected behavior.  
 2. **Submit a Pull Request (PR)** – Fork the repository, implement changes in a feature branch, and submit a Pull Request (PR) for review.  
 
-- Fork the repo, create a feature branch, make changes, and submit a Pull Request (PR)
-
 **Quick PR steps**
 ```bash
-fork → git clone
+# 1. Fork this repository and clone your fork
+fork → git clone     
 cd CodeClarity
 
-# make edits
+# 2. Create a new branch
+git checkout -b feature/your-feature-name
+
+# 3. Make your edits
 git add .
 git commit -m "Commit Message Here"
-git push -u origin docs/update-readme
-# open a PR from your fork
+
+# 4. Push your branch and open a PR
+git push -u origin feature/your-feature-name
+
+# 5. Open a PR from your fork
 ```
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
