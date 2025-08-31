@@ -111,6 +111,7 @@ git commit -m "Commit Message Here"
 ```bash
 # 4. Push your branch and open a PR
 git push -u origin feature/your-feature-name
+```
 ```bash
 # 5. Open a PR from your fork
 
