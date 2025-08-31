@@ -2,7 +2,8 @@
 [![OSCI-Project-Banner.png](https://i.postimg.cc/76mJvBmF/OSCI-Project-Banner.png)](https://postimg.cc/8JfzMb84)
 <div align="center">
     <img src="https://readme-typing-svg.herokuapp.com?color=00ffaa&size=35&width=900&height=80&lines=CodeClarity:+Next-Gen+Programming+Companion!"/>
-       <h1><b>CodeClarity</b></h1> 
+       
+<h1><b>CodeClarity</b></h1> 
 [![GitHub stars](https://img.shields.io/github/stars/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/stargazers)  
 [![GitHub forks](https://img.shields.io/github/forks/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/network/members)  
 [![GitHub watchers](https://img.shields.io/github/watchers/Sushma-1706/CodeClarity?style=social)](https://github.com/Sushma-1706/CodeClarity/watchers)  
