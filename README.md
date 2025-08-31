@@ -150,5 +150,5 @@ You can use, modify, and distribute this project freely, but attribution is requ
 This project is licensed under the MIT License. See [MIT License](License.md) for details.
 
 
-<h3 align="center">Show some &nbsp;❤️&nbsp; by &nbsp;🌟&nbsp; this repository!</h3>
+<h3 align="center">⭐ If you find this project useful, please give it a star to support development!</h3>
 
