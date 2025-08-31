@@ -114,6 +114,13 @@ git push -u origin feature/your-feature-name
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
+
+
+
+## 📜 Code of Conduct
+Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a welcoming community.
+
+
 ## 🙌 Getting Started
 
 Clone this repo and start contributing!
@@ -131,7 +138,13 @@ npm run dev
 This project is licensed under the MIT License.
 You can use, modify, and distribute this project freely, but attribution is required.
 “You can do almost anything you want with this code, just don’t hold us liable, and please keep our names in it.”
+
+
 ```
+## 📄 License
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+
 
 <h3 align="center">Show some &nbsp;❤️&nbsp; by &nbsp;🌟&nbsp; this repository!</h3>
 
