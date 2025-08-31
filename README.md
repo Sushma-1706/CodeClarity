@@ -74,23 +74,25 @@ It can:
 
 ## 🔐 Ownership & Authorship
 
-This project and its concept were originally created and led by:
+This project and its concept were originally created and are maintained by:  
 
 **👩 Damacharla Sushma**  
 🗓️ Idea Creation: July 28, 2025  
 🔗 [GitHub Profile](https://github.com/Sushma-1706)
 
 All rights reserved.  
-Please do not copy or redistribute this project without explicit written permission from the author.
+Unauthorized copying, redistribution, or reproduction of this project in any form is strictly prohibited without explicit written permission from the author.
 
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
-## 💡 Suggest Improvements
+## 💡 Contribution & Improvements  
+We welcome suggestions and contributions from the community to enhance **CodeClarity**.  
 
-You can:
+You can contribute in two ways:  
+1. **Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues)** – Describe the suggestion, bug, or improvement with clear expected behavior.  
+2. **Submit a Pull Request (PR)** – Fork the repository, implement changes in a feature branch, and submit a Pull Request (PR) for review.  
 
-- Open an [Issue](https://github.com/Sushma-1706/CodeClarity/issues) describing the suggestion/bug and expected behavior
 - Fork the repo, create a feature branch, make changes, and submit a Pull Request (PR)
 
 **Quick PR steps**
