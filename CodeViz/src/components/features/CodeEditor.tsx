@@ -234,55 +234,55 @@ const handleAnalyze = () => {
         </CardContent>
       </Card>
 
-      {/* Code Editor */}
-      <Card ref={editorCardRef} className="glass">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <FileText className="h-5 w-5 text-accent" />
-            Code Input
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="gap-1">
-              <Palette className="h-3 w-3" />
-              {getLanguageInfo(selectedLanguage).displayName}
-            </Badge>
-            <Button 
-              variant="ghost" 
-              size="icon-sm"
-              onClick={() => navigator.clipboard.writeText(code)}
-              title="Copy code"
-            >
-              <Copy className="h-4 w-4" />
-            </Button>
-            {isFullscreen ? (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={exitFullscreen}
-                title="Exit full screen (Esc)"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            ) : (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={enterFullscreen}
-                title="Full screen"
-              >
-                <Maximize2 className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent className={cn(isFullscreen && "h-[calc(100vh-10rem)] flex flex-col")}> 
-          <div className={cn(
-            "border border-border/20 rounded-lg overflow-hidden",
-            isFullscreen ? "flex-1" : ""
-          )}>
-            <CodeMirror
-              value={code}
-              height={isFullscreen ? "100%" : "300px"}
+             {/* Code Editor */}
+       <Card ref={editorCardRef} className={cn("glass", isFullscreen && "fixed inset-0 z-50 m-0 rounded-none")}>
+         <CardHeader className={cn("flex flex-row items-center justify-between pb-3", isFullscreen && "p-6")}>
+           <CardTitle className="text-lg flex items-center gap-2">
+             <FileText className="h-5 w-5 text-accent" />
+             Code Input
+           </CardTitle>
+           <div className="flex items-center gap-2">
+             <Badge variant="secondary" className="gap-1">
+               <Palette className="h-3 w-3" />
+               {getLanguageInfo(selectedLanguage).displayName}
+             </Badge>
+             <Button 
+               variant="ghost" 
+               size="icon-sm"
+               onClick={() => navigator.clipboard.writeText(code)}
+               title="Copy code"
+             >
+               <Copy className="h-4 w-4" />
+             </Button>
+             {isFullscreen ? (
+               <Button
+                 variant="ghost"
+                 size="icon-sm"
+                 onClick={exitFullscreen}
+                 title="Exit full screen (Esc)"
+               >
+                 <X className="h-4 w-4" />
+               </Button>
+             ) : (
+               <Button
+                 variant="ghost"
+                 size="icon-sm"
+                 onClick={enterFullscreen}
+                 title="Full screen"
+               >
+                 <Maximize2 className="h-4 w-4" />
+               </Button>
+             )}
+           </div>
+         </CardHeader>
+         <CardContent className={cn(isFullscreen && "flex-1 p-6 pt-0 flex flex-col")}> 
+           <div className={cn(
+             "border border-border/20 rounded-lg overflow-hidden",
+             isFullscreen ? "flex-1" : ""
+           )}>
+             <CodeMirror
+               value={code}
+               height={isFullscreen ? "80vh" : "40vh"}
               extensions={getLanguageExtension(selectedLanguage)}
               onChange={(value) => {
                 setCode(value);
