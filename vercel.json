@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd CodeViz-new && npm install && npm run build",
+  "outputDirectory": "CodeViz-new/dist",
+  "framework": "vite"
+}
