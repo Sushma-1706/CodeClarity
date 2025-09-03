@@ -13,16 +13,16 @@
     "react",
     "typescript"
   ],
-  "author": "Damacharla Sushma",
+  "author": "Rajeev Reddy",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Sushma-1706/CodeClarity.git",
-    "directory": "CodeViz"
+    "url": "https://github.com/RajeevReddy-4803/CodeClarity-main.git",
+    "directory": "CodeViz-new"
   },
-  "homepage": "https://github.com/Sushma-1706/CodeClarity#readme",
+  "homepage": "https://github.com/RajeevReddy-4803/CodeClarity-main#readme",
   "bugs": {
-    "url": "https://github.com/Sushma-1706/CodeClarity/issues"
+    "url": "https://github.com/RajeevReddy-4803/CodeClarity-main/issues"
   },
   "scripts": {
     "dev": "vite",
