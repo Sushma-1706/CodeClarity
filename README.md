@@ -41,6 +41,45 @@ It can:
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
+---
+## 📁 Project Structure
+
+```
+
+CodeClarity/
+├─ .github/
+│  └─ workflows/
+│     └─ issue-create-automate-message.yml
+├─ CodeViz/
+│  ├─ public/
+│  │  ├─ favicon.ico
+│  │  └─ other assets...
+│  ├─ src/
+│  │  ├─ assets/
+│  │  ├─ components/
+│  │  │  ├─ features/
+│  │  │  ├─ layout/
+│  │  │  └─ ui/ ...
+│  │  ├─ data/
+│  │  ├─ hooks/
+│  │  ├─ lib/
+│  │  ├─ pages/
+│  │  ├─ services/
+│  │  └─ App.tsx, main.tsx, index.css, ...
+│  ├─ index.html
+│  ├─ package.json
+│  ├─ tsconfig.json
+│  └─ other assets and documentations
+├─ CODE_OF_CONDUCT.md
+├─ CONTRIBUTING.md
+├─ IDEA.md
+├─ License.md
+├─ OWNERSHIP.md
+├─ README.md
+└─ SECURITY.md
+```
+---
+
 ## ✨ Features
 
  ### 🧠 Code Understanding  
