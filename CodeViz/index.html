@@ -5,29 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- 🌟 Title and Meta -->
+
      <link rel="icon" href="/updated-favicon.png" />
 
+
+ main
     <title>CodeViz | AI Code Explainer</title>
-    <meta name="description" content="CodeViz: Understand and visualize code with AI-powered explanations." />
+    <meta
+      name="description"
+      content="CodeViz: Understand and visualize code with AI-powered explanations."
+    />
     <meta name="author" content="Sushma Damacharla" />
 
     <!-- 🌐 Social Sharing (Open Graph) -->
     <meta property="og:title" content="CodeViz | AI Code Explainer" />
-    <meta property="og:description" content="Learn, debug, and visualize code using AI. Supports Python, Java, C++, JavaScript & more." />
+    <meta
+      property="og:description"
+      content="Learn, debug, and visualize code using AI. Supports Python, Java, C++, JavaScript & more."
+    />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/codeviz-opengraph.png" />
+    <meta property="og:image" content="./public/codeviz-opengraph.png" />
 
     <!-- 🐦 Twitter Preview -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@your_twitter_handle" />
-    <meta name="twitter:image" content="/codeviz-opengraph.png" />
+    <!-- 👉 Replace with actual Twitter handle or remove if not needed -->
+    <meta name="twitter:site" content="@CodeVizOfficial" />
+    <meta name="twitter:image" content="./public/codeviz-opengraph.png" />
 
-    <!-- 🌟 Favicon (Optional) -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- 🌟 Favicon -->
+    <link rel="icon" href="./public/updated-favicon.png" type="image/png" />
   </head>
 
   <body>
     <div id="root"></div>
+
+    <!-- ✅ In dev (Vite), keep src/main.tsx -->
     <script type="module" src="/src/main.tsx"></script>
+    <!-- ✅ In production (after build), it will auto-resolve to /dist/assets/index-xxxx.js -->
   </body>
 </html>
