@@ -9,10 +9,11 @@ import { AnalysisPanel } from "../features/AnalysisPanel";
 import { ToolsPanel } from "../features/ToolsPanel";
 import { PatternRecognitionPanel } from "../features/PatternRecognitionPanel";
 import { MLInsightsPanel } from "../features/MLInsightsPanel";
-import { 
-  Code, 
-  Eye, 
-  Brain, 
+import { AIAnalysis } from "../features/AIAnalysis";
+import {
+  Code,
+  Eye,
+  Brain,
   Wrench,
   Sparkles,
   Cpu,
@@ -21,6 +22,7 @@ import {
   Maximize2,
   Minimize2
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero-bg.jpg";
 
@@ -37,31 +39,40 @@ export const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("editor");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currentCode, setCurrentCode] = useState(`// Welcome to CodeViz AI!
+
+  // Code + language state
+  const [currentCode, setCurrentCode] = useState<string>(`// Welcome to CodeViz AI!
 function fibonacci(n) {
   if (n <= 1) return n;
   return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
 console.log(fibonacci(10));`);
-  const [currentLanguage, setCurrentLanguage] = useState("javascript");
+  const [currentLanguage, setCurrentLanguage] = useState<string>("javascript");
 
-  // Listen for ML insights navigation
+  // API Results
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [runResult, setRunResult] = useState<any>(null);
+  const [visualResult, setVisualResult] = useState<any>(null);
+
+  // ML insights navigation listener
   useEffect(() => {
     const handleSwitchToMLInsights = () => setActiveTab("ml-insights");
-    window.addEventListener('switchToMLInsights', handleSwitchToMLInsights);
-    return () => window.removeEventListener('switchToMLInsights', handleSwitchToMLInsights);
+    window.addEventListener("switchToMLInsights", handleSwitchToMLInsights);
+    return () =>
+      window.removeEventListener("switchToMLInsights", handleSwitchToMLInsights);
   }, []);
 
-  const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || CodeEditor;
+    const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || CodeEditor;
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Top Header */}
       <Header />
-      
+
       {/* Hero Section */}
       <div className="relative h-32 overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
@@ -72,7 +83,8 @@ console.log(fibonacci(10));`);
               AI-Powered Code Visualization
             </h1>
             <p className="text-muted-foreground max-w-2xl">
-              Transform complex code into interactive visualizations and explanations
+              Transform complex code into interactive visualizations and
+              explanations
             </p>
           </div>
         </div>
@@ -80,11 +92,13 @@ console.log(fibonacci(10));`);
 
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Sidebar Navigation */}
-          <aside className={cn(
-            "transition-all duration-300 sticky top-24 self-start",
-            sidebarCollapsed ? "w-16" : "w-64"
-          )}>
+          {/* Sidebar */}
+          <aside
+            className={cn(
+              "transition-all duration-300 sticky top-24 self-start",
+              sidebarCollapsed ? "w-16" : "w-64"
+            )}
+          >
             <Card className="glass">
               <CardContent className="p-3">
                 {/* Collapse Toggle */}
@@ -94,7 +108,11 @@ console.log(fibonacci(10));`);
                     size="icon-sm"
                     onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                   >
-                    {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                    {sidebarCollapsed ? (
+                      <ChevronRight className="h-4 w-4" />
+                    ) : (
+                      <ChevronLeft className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
 
@@ -103,7 +121,7 @@ console.log(fibonacci(10));`);
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
                     const isActive = activeTab === tab.id;
-                    
+
                     return (
                       <button
                         key={tab.id}
@@ -135,7 +153,9 @@ console.log(fibonacci(10));`);
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">Status</span>
-                        <Badge variant="secondary" className="text-xs">Ready</Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          Ready
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">AI Engine</span>
@@ -151,12 +171,14 @@ console.log(fibonacci(10));`);
             </Card>
           </aside>
 
-          {/* Main Content Area */}
-          <main className={cn(
-            "flex-1 transition-all duration-300",
-            isFullscreen && "fixed inset-0 z-50 bg-background p-6"
-          )}>
-            {/* Content Header */}
+          {/* Main Content */}
+          <main
+            className={cn(
+              "flex-1 transition-all duration-300",
+              isFullscreen && "fixed inset-0 z-50 bg-background p-6"
+            )}
+          >
+            {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 {tabs.map((tab) => {
@@ -172,32 +194,61 @@ console.log(fibonacci(10));`);
                   return null;
                 })}
               </div>
-              
+
               <Button
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => setIsFullscreen(!isFullscreen)}
                 className="ml-auto"
               >
-                {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                {isFullscreen ? (
+                  <Minimize2 className="h-4 w-4" />
+                ) : (
+                  <Maximize2 className="h-4 w-4" />
+                )}
               </Button>
             </div>
 
             {/* Dynamic Content */}
             <div className="animate-fade-in">
               {activeTab === "editor" ? (
-                <CodeEditor 
+                <CodeEditor
                   onCodeChange={setCurrentCode}
                   onLanguageChange={setCurrentLanguage}
                   initialCode={currentCode}
                   initialLanguage={currentLanguage}
+                  onAnalysis={(res: any) => {
+                    setAnalysisResult(res);
+                    setActiveTab("analyze");
+                  }}
+                  onRun={(res: any) => {
+                    setRunResult(res);
+                    setActiveTab("analyze");
+                  }}
+                  onVisualize={(res: any) => {
+                    setVisualResult(res);
+                    setActiveTab("visualize");
+                  }}
                 />
               ) : activeTab === "patterns" ? (
-                <PatternRecognitionPanel code={currentCode} language={currentLanguage} />
+                <PatternRecognitionPanel
+                  code={currentCode}
+                  language={currentLanguage}
+                />
               ) : activeTab === "ml-insights" ? (
                 <MLInsightsPanel code={currentCode} language={currentLanguage} />
+              ) : activeTab === "visualize" ? (
+                <VisualizationPanel result={visualResult} />
+              ) : activeTab === "analyze" ? (
+                <div className="space-y-6">
+                  <AIAnalysis
+                    analysisResult={analysisResult}
+                    runResult={runResult}
+                  />
+                  <AnalysisPanel analysis={analysisResult} run={runResult} />
+                </div>
               ) : (
-                <ActiveComponent />
+                <ToolsPanel />
               )}
             </div>
           </main>
