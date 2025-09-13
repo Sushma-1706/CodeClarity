@@ -47,13 +47,40 @@ interface CodeEditorProps {
 export const CodeEditor = ({
   onCodeChange, 
   onLanguageChange, 
-  initialCode = `// Welcome to CodeViz AI!
-function fibonacci(n) {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
+  initialCode = `// Welcome to CodeViz AI! Try different patterns:
+// 1. Load examples from Tools tab to see new patterns
+// 2. Or paste your own code here
+
+// Example: Queue implementation
+class Queue {
+  constructor() {
+    this.items = [];
+    this.front = 0;
+    this.rear = -1;
+  }
+  
+  enqueue(item) {
+    this.rear++;
+    this.items[this.rear] = item;
+  }
+  
+  dequeue() {
+    if (this.isEmpty()) return null;
+    const item = this.items[this.front];
+    this.front++;
+    return item;
+  }
+  
+  isEmpty() {
+    return this.front > this.rear;
+  }
 }
 
-console.log(fibonacci(10));`,
+// Test the queue
+const queue = new Queue();
+queue.enqueue(10);
+queue.enqueue(20);
+console.log(queue.dequeue()); // 10`,
   initialLanguage = "javascript",
 }: CodeEditorProps) => {
   const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
