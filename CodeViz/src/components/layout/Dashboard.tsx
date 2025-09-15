@@ -22,6 +22,7 @@ import {
   Minimize2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 const tabs = [
   {
@@ -86,6 +87,7 @@ function fibonacci(n) {
 
 console.log(fibonacci(10));`);
   const [currentLanguage, setCurrentLanguage] = useState("javascript");
+  const naviagate = useNavigate();
 
   useEffect(() => {
     const handleSwitchToMLInsights = () => setActiveTab("ml-insights");
