@@ -149,6 +149,199 @@ class PatternRecognitionEngine {
       complexity: { time: 'O(1)', space: 'O(1)' },
       tags: ['design-pattern', 'creational', 'global-access', 'single-instance']
     });
+
+    // Additional Data Structure Patterns
+    this.patterns.set('queue', {
+      id: 'queue',
+      name: 'Queue',
+      type: 'data-structure',
+      confidence: 0,
+      description: 'FIFO (First In, First Out) linear data structure',
+      explanation: {
+        simplified: 'Like a line at a store! The first person in line is the first to be served.',
+        technical: 'Linear data structure where elements are added at the rear and removed from the front, following FIFO principle.'
+      },
+      visualization: {
+        type: 'sequence',
+        data: { operations: ['enqueue (add to rear)', 'dequeue (remove from front)', 'peek (view front)'] }
+      },
+      examples: ['Queue', 'enqueue', 'dequeue', 'front', 'rear'],
+      complexity: { time: 'O(1) enqueue/dequeue', space: 'O(n)' },
+      tags: ['fifo', 'linear', 'dynamic', 'sequential-access']
+    });
+
+    this.patterns.set('stack', {
+      id: 'stack',
+      name: 'Stack',
+      type: 'data-structure',
+      confidence: 0,
+      description: 'LIFO (Last In, First Out) linear data structure',
+      explanation: {
+        simplified: 'Like a stack of plates! You can only add or remove plates from the top.',
+        technical: 'Linear data structure where elements are added and removed from the same end (top), following LIFO principle.'
+      },
+      visualization: {
+        type: 'sequence',
+        data: { operations: ['push (add to top)', 'pop (remove from top)', 'peek (view top)'] }
+      },
+      examples: ['Stack', 'push', 'pop', 'peek', 'top'],
+      complexity: { time: 'O(1) push/pop', space: 'O(n)' },
+      tags: ['lifo', 'linear', 'dynamic', 'top-access']
+    });
+
+    this.patterns.set('binary-tree', {
+      id: 'binary-tree',
+      name: 'Binary Tree',
+      type: 'data-structure',
+      confidence: 0,
+      description: 'Tree data structure where each node has at most two children',
+      explanation: {
+        simplified: 'Like a family tree, but each person can have at most two children!',
+        technical: 'Hierarchical data structure where each node has at most two children, typically called left and right.'
+      },
+      visualization: {
+        type: 'tree',
+        data: { structure: 'Root -> Left Child, Right Child' }
+      },
+      examples: ['TreeNode', 'left', 'right', 'root', 'leaf'],
+      complexity: { time: 'O(log n) average, O(n) worst', space: 'O(n)' },
+      tags: ['hierarchical', 'recursive', 'two-children', 'tree-traversal']
+    });
+
+    this.patterns.set('graph', {
+      id: 'graph',
+      name: 'Graph',
+      type: 'data-structure',
+      confidence: 0,
+      description: 'Collection of vertices connected by edges',
+      explanation: {
+        simplified: 'Like a social network! People (vertices) are connected by friendships (edges).',
+        technical: 'Non-linear data structure consisting of vertices (nodes) and edges that connect pairs of vertices.'
+      },
+      visualization: {
+        type: 'graph',
+        data: { vertices: 'Nodes', edges: 'Connections between nodes' }
+      },
+      examples: ['Graph', 'Vertex', 'Edge', 'adjacency', 'neighbor'],
+      complexity: { time: 'O(V + E) traversal', space: 'O(V + E)' },
+      tags: ['non-linear', 'vertices-edges', 'traversal', 'connectivity']
+    });
+
+    // Additional Sorting Algorithms
+    this.patterns.set('quick-sort', {
+      id: 'quick-sort',
+      name: 'Quick Sort',
+      type: 'algorithm',
+      confidence: 0,
+      description: 'Efficient divide-and-conquer sorting algorithm',
+      explanation: {
+        simplified: 'Like organizing books! Pick a "pivot" book, put smaller books to its left, bigger ones to its right, then repeat for each side.',
+        technical: 'Divide-and-conquer algorithm that picks a pivot element and partitions the array around the pivot, then recursively sorts the sub-arrays.'
+      },
+      visualization: {
+        type: 'sequence',
+        data: { steps: ['Choose pivot', 'Partition array', 'Recursively sort sub-arrays'] }
+      },
+      examples: ['quickSort', 'quicksort', 'partition', 'pivot'],
+      complexity: { time: 'O(n log n) average, O(n²) worst', space: 'O(log n)' },
+      tags: ['divide-conquer', 'efficient', 'in-place', 'recursive']
+    });
+
+    this.patterns.set('merge-sort', {
+      id: 'merge-sort',
+      name: 'Merge Sort',
+      type: 'algorithm',
+      confidence: 0,
+      description: 'Stable divide-and-conquer sorting algorithm',
+      explanation: {
+        simplified: 'Like sorting two piles of cards! Split the deck in half, sort each half, then merge them back together.',
+        technical: 'Divide-and-conquer algorithm that divides the array into two halves, sorts them recursively, then merges the sorted halves.'
+      },
+      visualization: {
+        type: 'tree',
+        data: { structure: 'Divide -> Sort -> Merge' }
+      },
+      examples: ['mergeSort', 'mergesort', 'merge', 'divide'],
+      complexity: { time: 'O(n log n)', space: 'O(n)' },
+      tags: ['divide-conquer', 'stable', 'guaranteed-performance', 'recursive']
+    });
+
+    this.patterns.set('heap-sort', {
+      id: 'heap-sort',
+      name: 'Heap Sort',
+      type: 'algorithm',
+      confidence: 0,
+      description: 'Comparison-based sorting using heap data structure',
+      explanation: {
+        simplified: 'Like organizing a pyramid! Build a heap (max-heap), then repeatedly remove the largest element.',
+        technical: 'Sorting algorithm that uses a binary heap to repeatedly extract the maximum element and place it at the end.'
+      },
+      visualization: {
+        type: 'tree',
+        data: { structure: 'Build Heap -> Extract Max -> Repeat' }
+      },
+      examples: ['heapSort', 'heapsort', 'heapify', 'extractMax'],
+      complexity: { time: 'O(n log n)', space: 'O(1)' },
+      tags: ['heap-based', 'in-place', 'guaranteed-performance', 'comparison-sort']
+    });
+
+    // Graph Traversal Algorithms
+    this.patterns.set('depth-first-search', {
+      id: 'depth-first-search',
+      name: 'Depth-First Search (DFS)',
+      type: 'algorithm',
+      confidence: 0,
+      description: 'Graph traversal algorithm that explores as far as possible along each branch',
+      explanation: {
+        simplified: 'Like exploring a maze! Go as far as you can down one path, then backtrack and try another.',
+        technical: 'Graph traversal algorithm that starts at a vertex and explores as far as possible along each branch before backtracking.'
+      },
+      visualization: {
+        type: 'graph',
+        data: { traversal: 'Deep exploration before backtracking' }
+      },
+      examples: ['dfs', 'depthFirstSearch', 'explore', 'backtrack'],
+      complexity: { time: 'O(V + E)', space: 'O(V)' },
+      tags: ['graph-traversal', 'recursive', 'backtracking', 'exploration']
+    });
+
+    this.patterns.set('breadth-first-search', {
+      id: 'breadth-first-search',
+      name: 'Breadth-First Search (BFS)',
+      type: 'algorithm',
+      confidence: 0,
+      description: 'Graph traversal algorithm that explores all neighbors before moving to next level',
+      explanation: {
+        simplified: 'Like ripples in a pond! Explore all neighbors at the current distance before moving further.',
+        technical: 'Graph traversal algorithm that explores all vertices at the current depth level before moving to the next level.'
+      },
+      visualization: {
+        type: 'graph',
+        data: { traversal: 'Level-by-level exploration' }
+      },
+      examples: ['bfs', 'breadthFirstSearch', 'queue', 'level'],
+      complexity: { time: 'O(V + E)', space: 'O(V)' },
+      tags: ['graph-traversal', 'queue-based', 'level-order', 'shortest-path']
+    });
+
+    this.patterns.set('binary-search-tree', {
+      id: 'binary-search-tree',
+      name: 'Binary Search Tree Operations',
+      type: 'algorithm',
+      confidence: 0,
+      description: 'Search, insert, and delete operations on BST',
+      explanation: {
+        simplified: 'Like a phone book! Left side has smaller numbers, right side has bigger numbers.',
+        technical: 'Binary tree where for each node, all values in left subtree are smaller and all values in right subtree are larger.'
+      },
+      visualization: {
+        type: 'tree',
+        data: { property: 'Left < Node < Right' }
+      },
+      examples: ['insert', 'search', 'delete', 'inorder', 'preorder', 'postorder'],
+      complexity: { time: 'O(log n) average, O(n) worst', space: 'O(log n)' },
+      tags: ['tree-operations', 'search-optimized', 'recursive', 'ordered']
+    });
   }
 
   public analyzeCode(code: string, language: string): PatternAnalysisResult {
@@ -215,6 +408,70 @@ class PatternRecognitionEngine {
         if (codeNormalized.includes('singleton') || codeNormalized.includes('getinstance')) confidence += 0.5;
         if (codeNormalized.includes('static') && codeNormalized.includes('instance')) confidence += 0.4;
         if (codeNormalized.includes('private') && codeNormalized.includes('constructor')) confidence += 0.3;
+        break;
+
+      // New Data Structure Patterns
+      case 'queue':
+        if (codeNormalized.includes('queue') || codeNormalized.includes('enqueue') || codeNormalized.includes('dequeue')) confidence += 0.5;
+        if (codeNormalized.includes('front') && codeNormalized.includes('rear')) confidence += 0.3;
+        if (codeNormalized.includes('fifo') || codeNormalized.includes('first in first out')) confidence += 0.4;
+        break;
+
+      case 'stack':
+        if (codeNormalized.includes('stack') || codeNormalized.includes('push') || codeNormalized.includes('pop')) confidence += 0.5;
+        if (codeNormalized.includes('peek') || codeNormalized.includes('top')) confidence += 0.3;
+        if (codeNormalized.includes('lifo') || codeNormalized.includes('last in first out')) confidence += 0.4;
+        break;
+
+      case 'binary-tree':
+        if (codeNormalized.includes('treenode') || codeNormalized.includes('tree')) confidence += 0.4;
+        if (codeNormalized.includes('left') && codeNormalized.includes('right')) confidence += 0.3;
+        if (codeNormalized.includes('root') || codeNormalized.includes('leaf')) confidence += 0.3;
+        if (codeNormalized.includes('inorder') || codeNormalized.includes('preorder') || codeNormalized.includes('postorder')) confidence += 0.2;
+        break;
+
+      case 'graph':
+        if (codeNormalized.includes('graph') || codeNormalized.includes('vertex') || codeNormalized.includes('edge')) confidence += 0.4;
+        if (codeNormalized.includes('adjacency') || codeNormalized.includes('neighbor')) confidence += 0.3;
+        if (codeNormalized.includes('vertices') && codeNormalized.includes('edges')) confidence += 0.3;
+        break;
+
+      // New Sorting Algorithms
+      case 'quick-sort':
+        if (codeNormalized.includes('quicksort') || codeNormalized.includes('quick sort')) confidence += 0.4;
+        if (codeNormalized.includes('pivot') || codeNormalized.includes('partition')) confidence += 0.4;
+        if (codeNormalized.includes('divide') && codeNormalized.includes('conquer')) confidence += 0.2;
+        break;
+
+      case 'merge-sort':
+        if (codeNormalized.includes('mergesort') || codeNormalized.includes('merge sort')) confidence += 0.4;
+        if (codeNormalized.includes('merge') && codeNormalized.includes('divide')) confidence += 0.4;
+        if (codeNormalized.includes('stable') || codeNormalized.includes('guaranteed')) confidence += 0.2;
+        break;
+
+      case 'heap-sort':
+        if (codeNormalized.includes('heapsort') || codeNormalized.includes('heap sort')) confidence += 0.4;
+        if (codeNormalized.includes('heapify') || codeNormalized.includes('extractmax')) confidence += 0.4;
+        if (codeNormalized.includes('max-heap') || codeNormalized.includes('min-heap')) confidence += 0.2;
+        break;
+
+      // Graph Traversal Algorithms
+      case 'depth-first-search':
+        if (codeNormalized.includes('dfs') || codeNormalized.includes('depth first')) confidence += 0.5;
+        if (codeNormalized.includes('backtrack') || codeNormalized.includes('explore')) confidence += 0.3;
+        if (codeNormalized.includes('recursive') && codeNormalized.includes('graph')) confidence += 0.2;
+        break;
+
+      case 'breadth-first-search':
+        if (codeNormalized.includes('bfs') || codeNormalized.includes('breadth first')) confidence += 0.5;
+        if (codeNormalized.includes('queue') && codeNormalized.includes('level')) confidence += 0.3;
+        if (codeNormalized.includes('shortest') && codeNormalized.includes('path')) confidence += 0.2;
+        break;
+
+      case 'binary-search-tree':
+        if (codeNormalized.includes('bst') || codeNormalized.includes('binary search tree')) confidence += 0.4;
+        if (codeNormalized.includes('insert') && codeNormalized.includes('search') && codeNormalized.includes('delete')) confidence += 0.3;
+        if (codeNormalized.includes('inorder') || codeNormalized.includes('preorder') || codeNormalized.includes('postorder')) confidence += 0.3;
         break;
     }
 

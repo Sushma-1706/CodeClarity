@@ -46,6 +46,59 @@ class MLPatternEngine {
       keywords: ['node', 'next', 'head', 'tail', 'link'],
       structures: ['pointer_traversal', 'dynamic_allocation', 'sequential_access'],
       complexity_indicators: ['linear_access', 'dynamic_size']
+    },
+    // New Data Structure Patterns
+    'queue': {
+      keywords: ['queue', 'enqueue', 'dequeue', 'front', 'rear', 'fifo'],
+      structures: ['fifo_operations', 'linear_structure', 'sequential_access'],
+      complexity_indicators: ['constant_time_operations', 'linear_space']
+    },
+    'stack': {
+      keywords: ['stack', 'push', 'pop', 'peek', 'top', 'lifo'],
+      structures: ['lifo_operations', 'linear_structure', 'top_access'],
+      complexity_indicators: ['constant_time_operations', 'linear_space']
+    },
+    'binary-tree': {
+      keywords: ['treenode', 'tree', 'left', 'right', 'root', 'leaf'],
+      structures: ['hierarchical_structure', 'recursive_traversal', 'two_children'],
+      complexity_indicators: ['logarithmic_access', 'recursive_structure']
+    },
+    'graph': {
+      keywords: ['graph', 'vertex', 'edge', 'adjacency', 'neighbor', 'vertices'],
+      structures: ['non_linear_structure', 'edge_connections', 'traversal_operations'],
+      complexity_indicators: ['polynomial_traversal', 'edge_density']
+    },
+    // New Sorting Algorithms
+    'quick-sort': {
+      keywords: ['quicksort', 'quick', 'pivot', 'partition', 'divide', 'conquer'],
+      structures: ['divide_conquer', 'pivot_selection', 'partitioning'],
+      complexity_indicators: ['log_n_average', 'quadratic_worst', 'in_place']
+    },
+    'merge-sort': {
+      keywords: ['mergesort', 'merge', 'divide', 'conquer', 'stable', 'guaranteed'],
+      structures: ['divide_conquer', 'merge_operation', 'recursive_division'],
+      complexity_indicators: ['guaranteed_log_n', 'stable_sort', 'extra_space']
+    },
+    'heap-sort': {
+      keywords: ['heapsort', 'heap', 'heapify', 'extractmax', 'max-heap', 'min-heap'],
+      structures: ['heap_operations', 'extraction_loop', 'heap_property'],
+      complexity_indicators: ['guaranteed_log_n', 'in_place', 'heap_based']
+    },
+    // Graph Traversal Algorithms
+    'depth-first-search': {
+      keywords: ['dfs', 'depth', 'first', 'backtrack', 'explore', 'recursive'],
+      structures: ['recursive_traversal', 'backtracking', 'deep_exploration'],
+      complexity_indicators: ['linear_traversal', 'stack_based', 'path_finding']
+    },
+    'breadth-first-search': {
+      keywords: ['bfs', 'breadth', 'first', 'queue', 'level', 'shortest', 'path'],
+      structures: ['queue_based', 'level_order', 'shortest_path'],
+      complexity_indicators: ['linear_traversal', 'queue_based', 'shortest_path']
+    },
+    'binary-search-tree': {
+      keywords: ['bst', 'binary', 'search', 'tree', 'insert', 'search', 'delete'],
+      structures: ['tree_operations', 'search_optimization', 'ordered_structure'],
+      complexity_indicators: ['log_n_operations', 'ordered_access', 'recursive_operations']
     }
   };
 
@@ -229,6 +282,74 @@ class MLPatternEngine {
       case 'adjacent_comparison':
         return /\[\s*\w+\s*\]\s*[<>]=?\s*\[\s*\w+\s*\+\s*1\s*\]/.test(code) ? 1.0 : 0.0;
 
+      // New structural patterns
+      case 'fifo_operations':
+        return /enqueue|dequeue/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'lifo_operations':
+        return /push|pop/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'hierarchical_structure':
+        return /left.*right|right.*left/.test(code.toLowerCase()) && 
+               /treenode|tree/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'non_linear_structure':
+        return /vertex|edge|adjacency/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'pivot_selection':
+        return /pivot|partition/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'merge_operation':
+        return /merge|divide/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'heap_operations':
+        return /heapify|extractmax|heap/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'recursive_traversal':
+        return /dfs|depth.*first/.test(code.toLowerCase()) && 
+               /recursive|backtrack/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'queue_based':
+        return /bfs|breadth.*first/.test(code.toLowerCase()) && 
+               /queue|level/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'tree_operations':
+        return /insert|search|delete/.test(code.toLowerCase()) && 
+               /bst|binary.*search.*tree/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'backtracking':
+        return /backtrack|explore/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'level_order':
+        return /level|queue/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'search_optimization':
+        return /binary.*search|bst/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'two_children':
+        return /left.*right/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'edge_connections':
+        return /edge|adjacency|neighbor/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'partitioning':
+        return /partition|pivot/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'recursive_division':
+        return /divide.*conquer|recursive/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'extraction_loop':
+        return /extract|heapify/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'deep_exploration':
+        return /depth.*first|dfs/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'shortest_path':
+        return /shortest.*path|bfs/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'ordered_structure':
+        return /inorder|preorder|postorder/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
       default:
         return 0.0;
     }
@@ -250,6 +371,73 @@ class MLPatternEngine {
 
       case 'linear_access':
         return features.structuralComplexity > 2 && features.structuralComplexity < 5 ? 1.0 : 0.5;
+
+      // New complexity indicators
+      case 'constant_time_operations':
+        return features.structuralComplexity < 3 ? 1.0 : 0.5;
+
+      case 'linear_space':
+        return features.structuralComplexity > 1 && features.structuralComplexity < 4 ? 1.0 : 0.5;
+
+      case 'logarithmic_access':
+        return features.structuralComplexity > 2 && features.structuralComplexity < 5 ? 1.0 : 0.5;
+
+      case 'recursive_structure':
+        return features.cyclomaticComplexity > 3 ? 1.0 : features.cyclomaticComplexity / 3;
+
+      case 'polynomial_traversal':
+        return features.structuralComplexity > 3 ? 1.0 : features.structuralComplexity / 3;
+
+      case 'edge_density':
+        return features.tokenCount > 50 ? 1.0 : features.tokenCount / 50;
+
+      case 'log_n_average':
+        return features.structuralComplexity > 2 && features.structuralComplexity < 5 ? 1.0 : 0.5;
+
+      case 'quadratic_worst':
+        return features.structuralComplexity > 4 ? 1.0 : features.structuralComplexity / 4;
+
+      case 'in_place':
+        return features.indentationLevel < 3 ? 1.0 : 0.5;
+
+      case 'guaranteed_log_n':
+        return features.structuralComplexity > 2 && features.structuralComplexity < 5 ? 1.0 : 0.5;
+
+      case 'stable_sort':
+        return features.structuralComplexity > 3 ? 1.0 : 0.5;
+
+      case 'extra_space':
+        return features.indentationLevel > 2 ? 1.0 : 0.5;
+
+      case 'heap_based':
+        return features.structuralComplexity > 3 ? 1.0 : 0.5;
+
+      case 'linear_traversal':
+        return features.structuralComplexity > 2 && features.structuralComplexity < 5 ? 1.0 : 0.5;
+
+      case 'stack_based':
+        return features.cyclomaticComplexity > 2 ? 1.0 : features.cyclomaticComplexity / 2;
+
+      case 'path_finding':
+        return features.structuralComplexity > 3 ? 1.0 : 0.5;
+
+      case 'queue_based':
+        return features.structuralComplexity > 2 ? 1.0 : 0.5;
+
+      case 'shortest_path':
+        return features.structuralComplexity > 3 ? 1.0 : 0.5;
+
+      case 'log_n_operations':
+        return features.structuralComplexity > 2 && features.structuralComplexity < 5 ? 1.0 : 0.5;
+
+      case 'ordered_access':
+        return features.structuralComplexity > 2 ? 1.0 : 0.5;
+
+      case 'recursive_operations':
+        return features.cyclomaticComplexity > 2 ? 1.0 : features.cyclomaticComplexity / 2;
+
+      case 'dynamic_size':
+        return features.structuralComplexity > 1 ? 1.0 : 0.5;
 
       default:
         return 0.0;
