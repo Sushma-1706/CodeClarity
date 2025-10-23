@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 const tabs = [
   {
@@ -98,6 +99,8 @@ console.log(fibonacci(10));`);
 
 
   // ML insights navigation listener
+  const [currentLanguage, setCurrentLanguage] = useState("javascript");
+  const naviagate = useNavigate();
 
   useEffect(() => {
     const handleSwitchToMLInsights = () => setActiveTab("ml-insights");
