@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { useNavigate } from "react-router-dom";
 import { 
   Code, 
   Brain, 
@@ -16,6 +17,7 @@ import { Link } from "react-router-dom";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/80 backdrop-blur-xl">
@@ -65,7 +67,7 @@ export const Header = () => {
           
           <ModeToggle />
           
-          <Button variant="secondary" size="sm" className="gap-2">
+          <Button variant="secondary" size="sm" className="gap-2" onClick={()=>navigate("/signup")}>
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Sign In</span>
           </Button>

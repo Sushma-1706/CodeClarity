@@ -10,7 +10,11 @@ import { PatternRecognitionPanel } from "../features/PatternRecognitionPanel";
 import { AnalysisInsightsPanel } from "../features/AnalysisInsightsPanel";
 import { Brain, Code, Cpu, Eye, Sparkles, UserRound, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
 import { useLocation } from "react-router-dom";
+=======
+import { useNavigate } from "react-router-dom";
+>>>>>>> bfa5296a16c494d85d783dd3446a650f2775b879
 
 const tabs = [
   {
@@ -94,6 +98,7 @@ export const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentCode, setCurrentCode] = useState(`// Welcome to CodeViz AI!\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nconsole.log(fibonacci(10));`);
   const [currentLanguage, setCurrentLanguage] = useState("javascript");
+<<<<<<< HEAD
   const [currentMode, setCurrentMode] = useState<"simplified" | "technical">("simplified");
 
   useEffect(() => {
@@ -103,6 +108,9 @@ export const Dashboard = () => {
       setActiveTab(requestedTab);
     }
   }, [location.search]);
+=======
+  const naviagate = useNavigate();
+>>>>>>> bfa5296a16c494d85d783dd3446a650f2775b879
 
   useEffect(() => {
     const handleSwitchToMLInsights = () => setActiveTab("ml-insights");
