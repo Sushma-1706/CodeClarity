@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 import { patternRecognitionEngine, CodePattern, PatternAnalysisResult } from "@/services/patternRecognition";
 import { PatternVisualization } from "./PatternVisualization";
+import { useNavigate } from "react-router-dom";
 
 interface PatternRecognitionPanelProps {
   code: string;
@@ -30,24 +31,36 @@ interface PatternRecognitionPanelProps {
 }
 
 export const PatternRecognitionPanel = ({ code, language }: PatternRecognitionPanelProps) => {
+  const navigate = useNavigate();
   const [analysis, setAnalysis] = useState<PatternAnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedPattern, setSelectedPattern] = useState<CodePattern | null>(null);
+  const analysisRequestIdRef = useRef(0);
 
   useEffect(() => {
     if (code.trim()) {
-      analyzeCode();
+      analyzeCode(code, language);
+    } else {
+      setAnalysis(null);
+      setSelectedPattern(null);
+      setIsAnalyzing(false);
     }
   }, [code, language]);
 
-  const analyzeCode = async () => {
+  const analyzeCode = async (codeToAnalyze: string = code, languageToAnalyze: string = language) => {
+    const requestId = ++analysisRequestIdRef.current;
     setIsAnalyzing(true);
+
     // Simulate ML processing time
     await new Promise(resolve => setTimeout(resolve, 1500));
+
+    if (requestId !== analysisRequestIdRef.current) {
+      return;
+    }
     
-    const result = patternRecognitionEngine.analyzeCode(code, language);
+    const result = patternRecognitionEngine.analyzeCode(codeToAnalyze, languageToAnalyze);
     setAnalysis(result);
-    setSelectedPattern(result.mainPattern);
+    setSelectedPattern(result.mainPattern || result.patterns[0] || null);
     setIsAnalyzing(false);
   };
 
@@ -107,7 +120,7 @@ export const PatternRecognitionPanel = ({ code, language }: PatternRecognitionPa
           </h2>
           <p className="text-muted-foreground">AI-powered code pattern analysis</p>
         </div>
-        <Button onClick={analyzeCode} variant="secondary" className="gap-2">
+        <Button onClick={() => analyzeCode()} variant="secondary" className="gap-2" disabled={!code.trim()}>
           <Brain className="h-4 w-4" />
           Re-analyze
         </Button>
@@ -234,8 +247,24 @@ export const PatternRecognitionPanel = ({ code, language }: PatternRecognitionPa
               <PatternVisualization 
                 patternId={selectedPattern.id}
                 patternName={selectedPattern.name}
+                visualizationData={selectedPattern.visualization}
                 className="mb-4"
               />
+
+              <Card className="glass">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Eye className="h-5 w-5 text-secondary" />
+                    How To Read The Visualization
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm text-muted-foreground">
+                  <p>1. Open Visual tab to see the overall logic blocks and decision points.</p>
+                  <p>2. Open Steps tab to understand each action in execution order.</p>
+                  <p>3. Open Code Flow tab to see pseudo-code style flow that matches the visual blocks.</p>
+                  <p>4. Use Animate to follow one step at a time and connect logic with your code.</p>
+                </CardContent>
+              </Card>
 
               <Card className="glass">
                 <CardHeader className="pb-3">
@@ -327,7 +356,10 @@ export const PatternRecognitionPanel = ({ code, language }: PatternRecognitionPa
               <Button 
                 variant="accent" 
                 className="gap-2"
-                onClick={() => window.dispatchEvent(new CustomEvent('switchToMLInsights'))}
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent("switchToMLInsights"));
+                  navigate("/editor?tab=ml-insights");
+                }}
               >
                 <Sparkles className="h-4 w-4" />
                 View ML Insights

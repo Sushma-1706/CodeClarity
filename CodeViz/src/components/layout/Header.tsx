@@ -12,6 +12,7 @@ import {
   Bell
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,7 +22,7 @@ export const Header = () => {
       <div className="container flex h-16 items-center justify-between px-4">
         {/* Logo and Brand */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="relative">
               <Brain className="h-8 w-8 text-secondary animate-pulse-glow" />
               <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-accent animate-float" />
@@ -30,22 +31,28 @@ export const Header = () => {
               <h1 className="text-xl font-bold text-gradient">CodeViz AI</h1>
               <span className="text-xs text-muted-foreground">Smart Code Explanation</span>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center gap-8 ">
-  <Button variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
-    <Code className="h-5 w-5" />
-    Editor
+  <Button asChild variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
+    <Link to="/editor?tab=editor">
+      <Code className="h-5 w-5" />
+      Editor
+    </Link>
   </Button>
-  <Button variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
-    <Sparkles className="h-5 w-5" />
-    Visualize
+  <Button asChild variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
+    <Link to="/editor?tab=visualize">
+      <Sparkles className="h-5 w-5" />
+      Visualize
+    </Link>
   </Button>
-  <Button variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
-    <Brain className="h-5 w-5" />
-    Explain
+  <Button asChild variant="ghost" size="sm" className="gap-2 text-lg px-6 py-3">
+    <Link to="/editor?tab=analyze">
+      <Brain className="h-5 w-5" />
+      Explain
+    </Link>
   </Button>
 </nav>
 
@@ -81,17 +88,23 @@ export const Header = () => {
   isMenuOpen ? "block animate-slide-up" : "hidden"
 )}>
   <nav className="container p-4 space-y-4">
-    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
-      <Code className="h-5 w-5" />
-      Editor
+    <Button asChild variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Link to="/editor?tab=editor" onClick={() => setIsMenuOpen(false)}>
+        <Code className="h-5 w-5" />
+        Editor
+      </Link>
     </Button>
-    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
-      <Sparkles className="h-5 w-5" />
-      Visualize
+    <Button asChild variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Link to="/editor?tab=visualize" onClick={() => setIsMenuOpen(false)}>
+        <Sparkles className="h-5 w-5" />
+        Visualize
+      </Link>
     </Button>
-    <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
-      <Brain className="h-5 w-5" />
-      Explain
+    <Button asChild variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
+      <Link to="/editor?tab=analyze" onClick={() => setIsMenuOpen(false)}>
+        <Brain className="h-5 w-5" />
+        Explain
+      </Link>
     </Button>
     <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-lg px-6 py-3">
       <Settings className="h-5 w-5" />

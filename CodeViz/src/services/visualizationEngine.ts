@@ -215,6 +215,83 @@ class VisualizationEngine {
           type: 'graph',
           data: this.generateLinkedListVisualization()
         };
+
+      case 'singleton':
+        return {
+          type: 'flowchart',
+          data: {
+            nodes: [
+              {
+                id: 'check_instance',
+                label: 'instance exists?',
+                type: 'condition',
+                metadata: { description: 'Check static instance reference' }
+              },
+              {
+                id: 'create_instance',
+                label: 'Create singleton instance',
+                type: 'variable',
+                metadata: { description: 'Initialize only once' }
+              },
+              {
+                id: 'return_instance',
+                label: 'Return instance',
+                type: 'return',
+                metadata: { description: 'Always return same object' }
+              }
+            ],
+            connections: [
+              { from: 'check_instance', to: 'create_instance', label: 'No' },
+              { from: 'check_instance', to: 'return_instance', label: 'Yes' },
+              { from: 'create_instance', to: 'return_instance' }
+            ]
+          }
+        };
+
+      case 'palindrome-check':
+        return {
+          type: 'flowchart',
+          data: {
+            nodes: [
+              {
+                id: 'read_input',
+                label: 'Read input value',
+                type: 'function',
+                metadata: { description: 'Store original value' }
+              },
+              {
+                id: 'reverse_value',
+                label: 'Reverse value',
+                type: 'loop',
+                metadata: { description: 'Build reversed representation' }
+              },
+              {
+                id: 'compare',
+                label: 'original == reversed?',
+                type: 'condition',
+                metadata: { description: 'Check palindrome condition' }
+              },
+              {
+                id: 'return_true',
+                label: 'Return Palindrome',
+                type: 'return',
+                metadata: { description: 'Input is symmetric' }
+              },
+              {
+                id: 'return_false',
+                label: 'Return Not Palindrome',
+                type: 'return',
+                metadata: { description: 'Input is not symmetric' }
+              }
+            ],
+            connections: [
+              { from: 'read_input', to: 'reverse_value' },
+              { from: 'reverse_value', to: 'compare' },
+              { from: 'compare', to: 'return_true', label: 'Yes' },
+              { from: 'compare', to: 'return_false', label: 'No' }
+            ]
+          }
+        };
       
       default:
         return {

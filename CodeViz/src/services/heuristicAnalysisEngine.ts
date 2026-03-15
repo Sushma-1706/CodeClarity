@@ -17,7 +17,7 @@ export interface MLPrediction {
   reasoning: string[];
 }
 
-class MLPatternEngine {
+class HeuristicAnalysisEngine {
   private readonly KEYWORDS = {
     javascript: ['function', 'return', 'if', 'else', 'for', 'while', 'const', 'let', 'var'],
     python: ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'class', 'import'],
@@ -46,16 +46,49 @@ class MLPatternEngine {
       keywords: ['node', 'next', 'head', 'tail', 'link'],
       structures: ['pointer_traversal', 'dynamic_allocation', 'sequential_access'],
       complexity_indicators: ['linear_access', 'dynamic_size']
+    },
+    'palindrome-check': {
+      keywords: ['palindrome', 'original', 'rev', 'reverse'],
+      structures: ['reverse_rebuild', 'mirror_compare', 'digit_extraction'],
+      complexity_indicators: ['linear_access', 'constant_space']
+    },
+    'singleton': {
+      keywords: ['singleton', 'getinstance', 'static', 'instance'],
+      structures: ['single_instance_guard', 'class_based_access'],
+      complexity_indicators: ['constant_space']
+    },
+    'dynamic-programming': {
+      keywords: ['dp', 'memo', 'cache', 'tabulation'],
+      structures: ['dp_table', 'overlapping_subproblems', 'state_transition'],
+      complexity_indicators: ['linear_access']
+    },
+    'graph-traversal': {
+      keywords: ['graph', 'visited', 'queue', 'stack', 'neighbor'],
+      structures: ['frontier_traversal', 'visited_set'],
+      complexity_indicators: ['linear_access']
     }
   };
 
   public extractFeatures(code: string, language: string): MLFeatures {
+    if (!code.trim()) {
+      return {
+        tokenCount: 0,
+        avgLineLength: 0,
+        indentationLevel: 0,
+        keywordDensity: {},
+        structuralComplexity: 0,
+        cyclomaticComplexity: 1,
+      };
+    }
+
     const lines = code.split('\n').filter(line => line.trim());
     const tokens = code.split(/\s+/).filter(token => token.length > 0);
     
     // Calculate basic metrics
-    const tokenCount = tokens.length;
-    const avgLineLength = lines.reduce((sum, line) => sum + line.length, 0) / lines.length;
+    const tokenCount = Math.max(tokens.length, 1);
+    const avgLineLength = lines.length > 0
+      ? lines.reduce((sum, line) => sum + line.length, 0) / lines.length
+      : 0;
     const indentationLevel = this.calculateIndentationComplexity(lines);
     
     // Keyword density analysis
@@ -83,6 +116,8 @@ class MLPatternEngine {
   }
 
   public predictPattern(code: string, language: string): MLPrediction[] {
+    if (!code.trim()) return [];
+
     const features = this.extractFeatures(code, language);
     const predictions: MLPrediction[] = [];
 
@@ -94,7 +129,7 @@ class MLPatternEngine {
       if (confidence > 0.2) { // Threshold for ML prediction
         predictions.push({
           patternId,
-          confidence,
+          confidence: Math.min(1, Math.max(0, Number(confidence.toFixed(2)))),
           features,
           reasoning
         });
@@ -174,14 +209,18 @@ class MLPatternEngine {
   ): number {
     let confidence = 0;
     const codeNormalized = code.toLowerCase();
+    const tokenCount = Math.max(features.tokenCount, 1);
 
     // Keyword matching with weighted scoring
     signature.keywords.forEach((keyword: string) => {
-      if (codeNormalized.includes(keyword)) {
+      const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(`\\b${escaped}\\b`, "gi");
+      const matches = codeNormalized.match(regex) || [];
+      if (matches.length > 0) {
         confidence += 0.15; // Base keyword match
         
         // Bonus for keyword density
-        const density = features.keywordDensity[keyword] || 0;
+        const density = matches.length / tokenCount;
         confidence += Math.min(density * 2, 0.1);
       }
     });
@@ -228,6 +267,43 @@ class MLPatternEngine {
 
       case 'adjacent_comparison':
         return /\[\s*\w+\s*\]\s*[<>]=?\s*\[\s*\w+\s*\+\s*1\s*\]/.test(code) ? 1.0 : 0.0;
+
+      case 'pointer_traversal':
+        return /(current|node)\s*=\s*(current|node)\.(next|nextNode)|->next/.test(code) ? 1.0 : 0.0;
+
+      case 'reverse_rebuild':
+        return /(rev|reverse)\s*=\s*(rev|reverse)\s*\*\s*10\s*\+/.test(code) ? 1.0 : 0.0;
+
+      case 'mirror_compare':
+        return /(original|input|str)\s*==\s*(rev|reverse|reversed)|\bpalindrome\b/i.test(code) ? 1.0 : 0.0;
+
+      case 'digit_extraction':
+        return /%\s*10/.test(code) && /\/\s*10/.test(code) ? 1.0 : 0.0;
+
+      case 'single_instance_guard':
+        return /getinstance|singleton\.instance|if\s*\(\s*!?\w*instance/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'class_based_access':
+        return /class\s+\w+/.test(code) && /static\s+\w+/.test(code) ? 1.0 : 0.0;
+
+      case 'dp_table':
+        return /\bdp\b\s*=|\bdp\s*\[/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'overlapping_subproblems':
+        return /memo|cache|dp/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'state_transition':
+        return /dp\s*\[\s*\w+\s*\]\s*\[\s*\w+\s*\]\s*=/.test(code) ? 1.0 : 0.0;
+
+      case 'frontier_traversal':
+        return /(queue|stack)\.(push|pop|shift)|while\s*\(\s*(queue|stack)\./.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'visited_set':
+        return /visited/.test(code.toLowerCase()) ? 1.0 : 0.0;
+
+      case 'dynamic_allocation':
+      case 'sequential_access':
+        return 0.6;
 
       default:
         return 0.0;
@@ -282,8 +358,19 @@ class MLPatternEngine {
       reasoning.push('Recursive pattern with decremental parameters detected');
     }
 
+    const matchedStructures = signature.structures.filter((structure: string) =>
+      this.detectStructuralPattern(code, structure) >= 0.8
+    );
+    if (matchedStructures.length > 0) {
+      reasoning.push(`Detected structural markers: ${matchedStructures.slice(0, 3).join(', ')}`);
+    }
+
     if (features.tokenCount < 50) {
       reasoning.push('Concise implementation suggests well-known algorithm pattern');
+    }
+
+    if (reasoning.length === 0) {
+      reasoning.push('Prediction is based on control-flow and keyword distribution signals.');
     }
 
     return reasoning;
@@ -311,6 +398,18 @@ class MLPatternEngine {
         'adjacent_comparison': 0.25,
         'swap_operations': 0.20,
         'quadratic_indicators': 0.15
+      },
+      'palindrome-check': {
+        'reverse_rebuild': 0.35,
+        'mirror_compare': 0.30,
+        'digit_extraction': 0.20,
+        'constant_space': 0.15
+      },
+      'singleton': {
+        'single_instance_guard': 0.40,
+        'class_based_access': 0.25,
+        'static_instance': 0.20,
+        'constructor_control': 0.15
       }
     };
 
@@ -318,4 +417,4 @@ class MLPatternEngine {
   }
 }
 
-export const mlPatternEngine = new MLPatternEngine();
+export const heuristicAnalysisEngine = new HeuristicAnalysisEngine();

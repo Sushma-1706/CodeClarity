@@ -21,7 +21,9 @@ import {
 import { cn } from "@/lib/utils";
 import { visualizationEngine } from "@/services/visualizationEngine";
 import { patternRecognitionEngine } from "@/services/patternRecognition";
-import { mlPatternEngine } from "@/services/mlPatternEngine";
+import { heuristicAnalysisEngine } from "@/services/heuristicAnalysisEngine";
+import { treeSitterFlowService } from "@/services/treeSitterFlowService";
+import { MermaidDiagram } from "./MermaidDiagram";
 
 const visualizationTypes = [
   { id: "flowchart", name: "Flowchart", icon: GitBranch, description: "Control flow visualization" },
@@ -44,6 +46,10 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
   const [detectedPatterns, setDetectedPatterns] = useState<any[]>([]);
   const [complexityAnalysis, setComplexityAnalysis] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [mermaidChart, setMermaidChart] = useState("");
+  const [flowParserSource, setFlowParserSource] = useState<"tree-sitter" | "fallback" | null>(null);
 
   // Analyze code when it changes
   useEffect(() => {
@@ -60,9 +66,46 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
   // Update visualization when type changes or analysis completes
   useEffect(() => {
     if (code.trim()) {
-      generateVisualization();
+      void generateVisualization();
     }
   }, [selectedType, code, detectedPatterns, complexityAnalysis]);
+
+  useEffect(() => {
+    if (selectedType !== "flowchart" || !visualizationData?.data?.nodes) {
+      setMermaidChart("");
+      return;
+    }
+
+    try {
+      setMermaidChart(treeSitterFlowService.buildMermaidMarkup(visualizationData, step));
+    } catch (error) {
+      console.warn("Unable to build Mermaid chart:", error);
+      setMermaidChart("");
+    }
+  }, [selectedType, visualizationData, step]);
+
+  useEffect(() => {
+    if (!isPlaying || maxSteps <= 1) return;
+
+    const delay = Math.max(250, Math.round(1000 / playbackSpeed));
+    const interval = window.setInterval(() => {
+      setStep((prev) => {
+        if (prev >= maxSteps) {
+          setIsPlaying(false);
+          return maxSteps;
+        }
+        return prev + 1;
+      });
+    }, delay);
+
+    return () => window.clearInterval(interval);
+  }, [isPlaying, maxSteps, playbackSpeed]);
+
+  useEffect(() => {
+    if (step >= maxSteps && maxSteps > 1) {
+      setIsPlaying(false);
+    }
+  }, [step, maxSteps]);
 
   const analyzeCode = async () => {
     setIsAnalyzing(true);
@@ -73,7 +116,7 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
       console.log("Detected patterns:", patternAnalysis.patterns);
 
       // Get ML features
-      const mlFeatures = mlPatternEngine.extractFeatures(code, language);
+      const mlFeatures = heuristicAnalysisEngine.extractFeatures(code, language);
       
       // Calculate complexity
       const complexity = {
@@ -109,11 +152,12 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
     return "O(1)";
   };
 
-  const generateVisualization = () => {
+  const generateVisualization = async () => {
     if (!code.trim()) {
       setVisualizationData(null);
       setMaxSteps(0);
       setStep(1);
+      setFlowParserSource(null);
       return;
     }
 
@@ -123,7 +167,7 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
 
       switch (selectedType) {
         case "flowchart":
-          data = generateFlowchartVisualization();
+          data = await generateFlowchartVisualization();
           steps = data?.data?.nodes?.length || 0;
           break;
         case "execution":
@@ -146,73 +190,34 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
 
       if (data) {
         setVisualizationData(data);
+        if (selectedType === "flowchart") {
+          setFlowParserSource(data?.data?.parser || "fallback");
+        }
         setMaxSteps(Math.max(steps, 1));
         setStep(1);
         console.log("Generated " + selectedType + " visualization:", data);
       } else {
         console.warn("No data generated for visualization type:", selectedType);
         setVisualizationData(null);
+        if (selectedType === "flowchart") {
+          setFlowParserSource(null);
+        }
         setMaxSteps(0);
         setStep(1);
       }
     } catch (error) {
       console.error("Error generating visualization:", error);
       setVisualizationData(null);
+      if (selectedType === "flowchart") {
+        setFlowParserSource(null);
+      }
       setMaxSteps(0);
       setStep(1);
     }
   };
 
-  const generateFlowchartVisualization = () => {
-    // Use detected patterns to generate appropriate flowchart
-    if (detectedPatterns.length > 0) {
-      const mainPattern = detectedPatterns[0];
-      const patternViz = visualizationEngine.generatePatternVisualization(mainPattern.id);
-      
-      // Convert pattern visualization to flowchart format if needed
-      if (patternViz.type === 'flowchart') {
-        return patternViz;
-      } else if (patternViz.type === 'tree') {
-        // Convert tree to flowchart for better visualization
-        return {
-          type: 'flowchart',
-          data: {
-            nodes: [
-              { id: 'start', label: 'Start', type: 'function' },
-              { id: 'base_case', label: 'Base Case Check', type: 'condition' },
-              { id: 'return_base', label: 'Return Base Value', type: 'return' },
-              { id: 'recursive_calls', label: 'Recursive Calls', type: 'variable' },
-              { id: 'combine', label: 'Combine Results', type: 'variable' },
-              { id: 'end', label: 'End', type: 'return' }
-            ],
-            connections: [
-              { from: 'start', to: 'base_case' },
-              { from: 'base_case', to: 'return_base', label: 'Yes' },
-              { from: 'base_case', to: 'recursive_calls', label: 'No' },
-              { from: 'recursive_calls', to: 'combine' },
-              { from: 'combine', to: 'end' },
-              { from: 'return_base', to: 'end' }
-            ]
-          }
-        };
-      }
-    }
-
-    // Fallback to generic flowchart based on code structure
-    return {
-      type: 'flowchart',
-      data: {
-        nodes: [
-          { id: 'start', label: 'Start', type: 'function' },
-          { id: 'process', label: 'Process Code', type: 'variable' },
-          { id: 'end', label: 'End', type: 'return' }
-        ],
-        connections: [
-          { from: 'start', to: 'process' },
-          { from: 'process', to: 'end' }
-        ]
-      }
-    };
+  const generateFlowchartVisualization = async () => {
+    return treeSitterFlowService.buildFlowchart(code, language);
   };
 
   const generateExecutionVisualization = () => {
@@ -335,6 +340,48 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
     }
   };
 
+  const toggleFullscreen = async () => {
+    const panel = document.getElementById("visualization-panel-root");
+    if (!panel) return;
+
+    if (document.fullscreenElement === panel) {
+      await document.exitFullscreen();
+      setIsFullscreen(false);
+      return;
+    }
+
+    if (panel.requestFullscreen) {
+      await panel.requestFullscreen();
+      setIsFullscreen(true);
+    }
+  };
+
+  const handleExport = () => {
+    const payload = {
+      code,
+      language,
+      selectedType,
+      visualizationData,
+      complexityAnalysis,
+      exportedAt: new Date().toISOString(),
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `visualization-${selectedType}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const denominator = maxSteps > 0 ? maxSteps : 1;
+  const progressWidth = Math.min(100, Math.max(0, (step / denominator) * 100));
+
   const renderFlowchartContent = () => {
     if (!visualizationData?.data?.nodes) {
       return <div className="text-center text-muted-foreground">No flowchart data available</div>;
@@ -342,42 +389,37 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
 
     return (
       <div className="space-y-4">
-        {visualizationData.data.nodes.map((node: any, index: number) => {
-          const isActive = step > index;
-          const getNodeColor = (type: string) => {
-            switch (type) {
-              case 'function': return 'border-secondary bg-secondary/10';
-              case 'condition': return 'border-warning bg-warning/10';
-              case 'loop': return 'border-accent bg-accent/10';
-              case 'return': return 'border-success bg-success/10';
-              case 'variable': return 'border-muted bg-muted/10';
-              default: return 'border-border bg-background';
-            }
-          };
+        <div className="rounded-lg border border-border/30 bg-background/80 p-4">
+          {mermaidChart ? (
+            <MermaidDiagram chart={mermaidChart} className="w-full overflow-auto" />
+          ) : (
+            <p className="text-sm text-muted-foreground">Mermaid diagram is preparing...</p>
+          )}
+        </div>
 
-          return (
-            <div
-              key={node.id}
-              className={cn(
-                "p-4 rounded-lg border-2 transition-all duration-500",
-                getNodeColor(node.type),
-                isActive && "ring-2 ring-primary scale-105"
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <Badge variant="outline" className="text-xs">
-                  {node.type}
-                </Badge>
-                <span className="font-medium">{node.label}</span>
+        <div className="space-y-2">
+          <div className="text-xs text-muted-foreground">Flow Steps</div>
+          {visualizationData.data.nodes.map((node: any, index: number) => {
+            const isActive = step > index;
+            return (
+              <div
+                key={node.id}
+                className={cn(
+                  "p-3 rounded-lg border transition-all duration-300",
+                  isActive ? "border-primary/50 bg-primary/5" : "border-border/40 bg-muted/20"
+                )}
+              >
+                <div className="flex items-center gap-2">
+                  <Badge variant={isActive ? "default" : "outline"} className="text-[10px]">{node.type}</Badge>
+                  <span className="text-sm font-medium">{node.label}</span>
+                </div>
+                {node.metadata?.description && (
+                  <p className="text-xs text-muted-foreground mt-1">{node.metadata.description}</p>
+                )}
               </div>
-              {node.metadata?.description && (
-                <p className="text-sm text-muted-foreground mt-2">
-                  {node.metadata.description}
-                </p>
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -543,7 +585,7 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
   };
 
   return (
-    <div className="space-y-6">
+    <div id="visualization-panel-root" className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="space-y-2">
@@ -552,13 +594,13 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
         </div>
         
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleExport}>
             <Download className="h-4 w-4" />
             Export
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={toggleFullscreen}>
             <Maximize className="h-4 w-4" />
-            Fullscreen
+            {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           </Button>
         </div>
       </div>
@@ -619,8 +661,14 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
                 {complexityAnalysis.time} Time
               </Badge>
             )}
+            {selectedType === "flowchart" && flowParserSource && (
+              <Badge variant="outline" className="gap-1">
+                <GitBranch className="h-3 w-3" />
+                {flowParserSource === "tree-sitter" ? "Tree-sitter AST" : "Fallback Flow"}
+              </Badge>
+            )}
           </div>
-          <Button variant="ghost" size="icon-sm">
+          <Button variant="ghost" size="icon-sm" onClick={analyzeCode} title="Re-analyze code">
             <Settings className="h-4 w-4" />
           </Button>
         </CardHeader>
@@ -657,7 +705,12 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
               <Button
                 variant={isPlaying ? "destructive" : "secondary"}
                 size="icon"
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={() => {
+                  if (step >= maxSteps && maxSteps > 1) {
+                    setStep(1);
+                  }
+                  setIsPlaying((prev) => !prev);
+                }}
               >
                 {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </Button>
@@ -678,17 +731,23 @@ export const VisualizationPanel = ({ code = "", language = "javascript" }: Visua
                 <div className="flex-1 bg-muted rounded-full h-2">
                   <div 
                     className="bg-gradient-secondary h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(step / maxSteps) * 100}%` }}
+                    style={{ width: `${progressWidth}%` }}
                   />
                 </div>
-                <span className="text-sm font-medium">{step}/{maxSteps}</span>
+                <span className="text-sm font-medium">{Math.min(step, maxSteps)}/{maxSteps}</span>
               </div>
             </div>
 
             {/* Speed Control */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Speed:</span>
-              <Button variant="outline" size="sm">1x</Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPlaybackSpeed((prev) => (prev >= 3 ? 0.5 : prev + 0.5))}
+              >
+                {playbackSpeed}x
+              </Button>
             </div>
           </div>
         </CardContent>

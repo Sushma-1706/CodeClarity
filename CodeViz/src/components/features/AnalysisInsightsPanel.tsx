@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -17,39 +17,67 @@ import {
   Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mlPatternEngine, MLFeatures, MLPrediction } from "@/services/mlPatternEngine";
+import { heuristicAnalysisEngine, MLFeatures, MLPrediction } from "@/services/heuristicAnalysisEngine";
 
-interface MLInsightsPanelProps {
+interface AnalysisInsightsPanelProps {
   code: string;
   language: string;
 }
 
-export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
+export const AnalysisInsightsPanel = ({ code, language }: AnalysisInsightsPanelProps) => {
   const [features, setFeatures] = useState<MLFeatures | null>(null);
   const [predictions, setPredictions] = useState<MLPrediction[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedPrediction, setSelectedPrediction] = useState<MLPrediction | null>(null);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     if (code.trim()) {
       analyzeWithML();
+    } else {
+      setFeatures(null);
+      setPredictions([]);
+      setSelectedPrediction(null);
+      setIsAnalyzing(false);
     }
   }, [code, language]);
 
   const analyzeWithML = async () => {
+    if (!code.trim()) return;
+    const requestId = ++requestIdRef.current;
     setIsAnalyzing(true);
     
     // Simulate ML processing time
     await new Promise(resolve => setTimeout(resolve, 2000));
+
+    if (requestId !== requestIdRef.current) {
+      return;
+    }
     
-    const extractedFeatures = mlPatternEngine.extractFeatures(code, language);
-    const mlPredictions = mlPatternEngine.predictPattern(code, language);
+    const extractedFeatures = heuristicAnalysisEngine.extractFeatures(code, language);
+    const mlPredictions = heuristicAnalysisEngine.predictPattern(code, language);
     
     setFeatures(extractedFeatures);
     setPredictions(mlPredictions);
     setSelectedPrediction(mlPredictions[0] || null);
     setIsAnalyzing(false);
   };
+
+  const formatPatternName = (patternId: string) =>
+    patternId
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+  const getConfidenceLabel = (confidence: number) => {
+    if (confidence >= 0.8) return "High confidence";
+    if (confidence >= 0.55) return "Moderate confidence";
+    return "Low confidence";
+  };
+
+  const selectedImportance = selectedPrediction
+    ? heuristicAnalysisEngine.getFeatureImportance(selectedPrediction.patternId)
+    : {};
 
   const getComplexityColor = (value: number, type: 'low' | 'medium' | 'high') => {
     if (type === 'low') return value < 2 ? 'text-success' : value < 5 ? 'text-warning' : 'text-destructive';
@@ -78,7 +106,7 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
         <Brain className="h-12 w-12 text-muted-foreground mx-auto" />
         <h3 className="text-xl font-semibold">No ML Analysis Available</h3>
         <p className="text-muted-foreground">Enter code to see machine learning insights</p>
-        <Button onClick={analyzeWithML} variant="secondary" className="gap-2">
+        <Button onClick={analyzeWithML} variant="secondary" className="gap-2" disabled={!code.trim()}>
           <RefreshCw className="h-4 w-4" />
           Run ML Analysis
         </Button>
@@ -97,7 +125,7 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
           </h2>
           <p className="text-muted-foreground">Advanced machine learning pattern analysis</p>
         </div>
-        <Button onClick={analyzeWithML} variant="secondary" className="gap-2">
+        <Button onClick={analyzeWithML} variant="secondary" className="gap-2" disabled={!code.trim()}>
           <RefreshCw className="h-4 w-4" />
           Re-analyze
         </Button>
@@ -116,10 +144,10 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <h3 className="text-xl font-semibold capitalize">
-                  {selectedPrediction.patternId.replace('-', ' ')}
+                  {formatPatternName(selectedPrediction.patternId)}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Machine learning confidence score
+                  Machine learning confidence score ({getConfidenceLabel(selectedPrediction.confidence)})
                 </p>
               </div>
               <div className="text-right space-y-1">
@@ -144,6 +172,21 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
                     {reason}
                   </div>
                 ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-medium">What this means for your code</h4>
+              <div className="grid gap-2 text-sm text-muted-foreground">
+                <div className="rounded-md border border-border/30 px-3 py-2">
+                  Main detected behavior: {formatPatternName(selectedPrediction.patternId)}
+                </div>
+                <div className="rounded-md border border-border/30 px-3 py-2">
+                  Complexity signal: cyclomatic {features.cyclomaticComplexity}, structural {features.structuralComplexity.toFixed(1)}
+                </div>
+                <div className="rounded-md border border-border/30 px-3 py-2">
+                  Recommendation: validate edge cases and keep function responsibilities focused.
+                </div>
               </div>
             </div>
           </CardContent>
@@ -188,10 +231,10 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
                       <Badge variant="secondary">#{index + 1}</Badge>
                       <div>
                         <h4 className="font-medium capitalize">
-                          {prediction.patternId.replace('-', ' ')}
+                          {formatPatternName(prediction.patternId)}
                         </h4>
                         <p className="text-sm text-muted-foreground">
-                          ML Pattern Recognition
+                          {getConfidenceLabel(prediction.confidence)}
                         </p>
                       </div>
                     </div>
@@ -258,6 +301,9 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
                       <Progress value={density * 100} className="h-1" />
                     </div>
                   ))}
+                {Object.entries(features.keywordDensity).filter(([_, density]) => density > 0).length === 0 && (
+                  <p className="text-sm text-muted-foreground">No dominant language keyword pattern detected in this snippet.</p>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -305,6 +351,31 @@ export const MLInsightsPanel = ({ code, language }: MLInsightsPanelProps) => {
 
         <TabsContent value="insights" className="space-y-4">
           <div className="space-y-4">
+            {selectedPrediction && Object.keys(selectedImportance).length > 0 && (
+              <Card className="glass">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Target className="h-5 w-5 text-accent" />
+                    Top Factors Behind This Prediction
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {Object.entries(selectedImportance)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5)
+                    .map(([feature, weight]) => (
+                      <div key={feature} className="space-y-1">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="capitalize">{feature.replace(/_/g, " ")}</span>
+                          <span className="text-muted-foreground">{Math.round(weight * 100)}%</span>
+                        </div>
+                        <Progress value={weight * 100} className="h-1.5" />
+                      </div>
+                    ))}
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="glass">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">

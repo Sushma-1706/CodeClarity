@@ -40,7 +40,7 @@ The Smart Code Pattern Recognition Engine is an advanced AI-powered system that 
    - Code structure analysis
    - Suggestion generation
 
-2. **ML Pattern Engine** (`mlPatternEngine.ts`)
+2. **ML Pattern Engine** (`heuristicAnalysisEngine.ts`)
    - Feature extraction from code
    - Machine learning predictions
    - Advanced pattern matching
@@ -54,7 +54,7 @@ The Smart Code Pattern Recognition Engine is an advanced AI-powered system that 
 
 4. **UI Components**
    - `PatternRecognitionPanel.tsx`: Main pattern analysis interface
-   - `MLInsightsPanel.tsx`: Advanced ML analysis dashboard
+   - `AnalysisInsightsPanel.tsx`: Advanced ML analysis dashboard
    - `PatternVisualization.tsx`: Interactive visualizations
 
 ### Pattern Detection Algorithm
