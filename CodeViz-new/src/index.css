@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AI Code Platform Design System - Modern, Professional, Engaging */
+
+@layer base {
+  :root {
+    /* Core Brand Colors */
+    --background: 250 250% 99%;
+    --foreground: 222 84% 4.9%;
+
+    /* Surface Colors */
+    --card: 0 0% 100%;
+    --card-foreground: 222 84% 4.9%;
+    --surface-elevated: 220 14% 96%;
+    --surface-muted: 217 32% 97%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 84% 4.9%;
+
+    /* Brand Primary - Deep Blue for Tech Feel */
+    --primary: 222 47% 11%;
+    --primary-foreground: 210 40% 98%;
+    --primary-light: 222 47% 25%;
+    --primary-glow: 222 84% 65%;
+
+    /* Secondary - Modern Purple for AI/Tech */
+    --secondary: 262 83% 58%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 262 83% 70%;
+    --secondary-dark: 262 83% 45%;
+
+    /* Accent - Vibrant Cyan for Highlights */
+    --accent: 191 91% 55%;
+    --accent-foreground: 222 84% 4.9%;
+    --accent-light: 191 91% 70%;
+    --accent-glow: 191 91% 55%;
+
+    /* Success/Error States */
+    --success: 142 76% 36%;
+    --success-foreground: 355 100% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 84% 4.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Neutral Palette */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 222 84% 4.9%;
+
+    /* Code Editor Specific */
+    --editor-bg: 220 13% 18%;
+    --editor-foreground: 220 14% 96%;
+    --code-comment: 220 9% 55%;
+    --code-keyword: 262 83% 70%;
+    --code-string: 142 76% 55%;
+    --code-number: 191 91% 70%;
+    --code-function: 38 92% 65%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222 47% 11%), hsl(262 83% 58%));
+    --gradient-secondary: linear-gradient(135deg, hsl(262 83% 58%), hsl(191 91% 55%));
+    --gradient-accent: linear-gradient(135deg, hsl(191 91% 55%), hsl(142 76% 55%));
+    --gradient-surface: linear-gradient(180deg, hsl(250 250% 99%), hsl(220 14% 96%));
+    --gradient-glow: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), hsl(262 83% 58% / 0.15), transparent 40%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(222 84% 4.9% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(222 84% 4.9% / 0.1), 0 2px 4px -1px hsl(222 84% 4.9% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(222 84% 4.9% / 0.1), 0 4px 6px -2px hsl(222 84% 4.9% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(222 84% 4.9% / 0.1), 0 10px 10px -5px hsl(222 84% 4.9% / 0.04);
+    --shadow-glow: 0 0 30px hsl(262 83% 58% / 0.3);
+    --shadow-accent: 0 0 20px hsl(191 91% 55% / 0.4);
+
+    /* Animation Timings */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Core Dark Theme */
+    --background: 222 47% 8%;
+    --foreground: 220 14% 96%;
+
+    /* Surface Colors */
+    --card: 222 47% 11%;
+    --card-foreground: 220 14% 96%;
+    --surface-elevated: 222 47% 15%;
+    --surface-muted: 222 47% 13%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 220 14% 96%;
+
+    /* Brand Colors Adjusted for Dark */
+    --primary: 262 83% 70%;
+    --primary-foreground: 222 47% 8%;
+    --primary-light: 262 83% 85%;
+    --primary-glow: 262 83% 65%;
+
+    --secondary: 191 91% 70%;
+    --secondary-foreground: 222 47% 8%;
+    --secondary-light: 191 91% 85%;
+    --secondary-dark: 191 91% 55%;
+
+    --accent: 142 76% 55%;
+    --accent-foreground: 222 47% 8%;
+    --accent-light: 142 76% 70%;
+    --accent-glow: 142 76% 55%;
+
+    /* Neutral Dark Palette */
+    --muted: 222 47% 15%;
+    --muted-foreground: 220 9% 65%;
+    --border: 222 47% 20%;
+    --input: 222 47% 20%;
+    --ring: 262 83% 70%;
+
+    /* Code Editor Dark */
+    --editor-bg: 222 47% 12%;
+    --editor-foreground: 220 14% 96%;
+
+    /* Gradients Dark */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 70%), hsl(191 91% 70%));
+    --gradient-secondary: linear-gradient(135deg, hsl(191 91% 70%), hsl(142 76% 55%));
+    --gradient-surface: linear-gradient(180deg, hsl(222 47% 8%), hsl(222 47% 12%));
+    --gradient-glow: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), hsl(262 83% 70% / 0.15), transparent 40%);
+
+    /* Dark Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(222 47% 4% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(222 47% 4% / 0.4), 0 2px 4px -1px hsl(222 47% 4% / 0.2);
+    --shadow-lg: 0 10px 15px -3px hsl(222 47% 4% / 0.4), 0 4px 6px -2px hsl(222 47% 4% / 0.2);
+    --shadow-xl: 0 20px 25px -5px hsl(222 47% 4% / 0.4), 0 10px 10px -5px hsl(222 47% 4% / 0.2);
+    --shadow-glow: 0 0 30px hsl(262 83% 70% / 0.4);
+    --shadow-accent: 0 0 20px hsl(191 91% 70% / 0.4);
+
+    /* Sidebar Dark */
+    --sidebar-background: 222 47% 12%;
+    --sidebar-foreground: 220 14% 96%;
+    --sidebar-primary: 262 83% 70%;
+    --sidebar-primary-foreground: 222 47% 8%;
+    --sidebar-accent: 222 47% 18%;
+    --sidebar-accent-foreground: 220 14% 96%;
+    --sidebar-border: 222 47% 20%;
+    --sidebar-ring: 262 83% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: var(--gradient-surface);
+  }
+}
+
+@layer components {
+  /* Interactive Elements */
+  .glow-on-hover {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+  
+  .glow-on-hover::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: var(--gradient-glow);
+    z-index: -1;
+  }
+  
+  .glow-on-hover:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Code Syntax Highlighting */
+  .code-keyword { color: hsl(var(--code-keyword)); }
+  .code-string { color: hsl(var(--code-string)); }
+  .code-comment { color: hsl(var(--code-comment)); }
+  .code-number { color: hsl(var(--code-number)); }
+  .code-function { color: hsl(var(--code-function)); }
+
+  /* Glass Morphism Effects */
+  .glass {
+    @apply backdrop-blur-sm;
+    background: hsla(var(--card) / 0.7);
+    border: 1px solid hsla(var(--border) / 0.2);
+  }
+
+  .glass-heavy {
+    @apply backdrop-blur-lg;
+    background: hsla(var(--card) / 0.9);
+    border: 1px solid hsla(var(--border) / 0.3);
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-secondary {
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .bg-gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-accent {
+    box-shadow: var(--shadow-accent);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: var(--shadow-glow); }
+  50% { box-shadow: var(--shadow-accent); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
