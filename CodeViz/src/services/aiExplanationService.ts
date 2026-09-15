@@ -32,6 +32,17 @@ interface GrokChatResponse {
 
 const GROK_API_URL = "https://api.x.ai/v1/chat/completions";
 const DEFAULT_GROK_MODEL = "grok-2-latest";
+const API_TIMEOUT_MS = 30_000; // 30 second timeout for AI requests
+
+export class AIRequestError extends Error {
+  public readonly type: "timeout" | "network" | "api" | "unknown";
+
+  constructor(message: string, type: "timeout" | "network" | "api" | "unknown") {
+    super(message);
+    this.name = "AIRequestError";
+    this.type = type;
+  }
+}
 
 class AIExplanationService {
   public async generateExplanation(
@@ -72,6 +83,13 @@ class AIExplanationService {
       };
     } catch (error) {
       console.warn("Grok explanation failed, using local fallback:", error);
+      // Re-throw typed errors so the UI can display meaningful messages,
+      // but still attach the local fallback for components that want it
+      if (error instanceof AIRequestError) {
+        const enrichedError = new AIRequestError(error.message, error.type);
+        (enrichedError as any).fallbackExplanation = localExplanation;
+        throw enrichedError;
+      }
       return localExplanation;
     }
   }
@@ -113,6 +131,11 @@ class AIExplanationService {
       };
     } catch (error) {
       console.warn("Grok why-mode failed, using local fallback:", error);
+      if (error instanceof AIRequestError) {
+        const enrichedError = new AIRequestError(error.message, error.type);
+        (enrichedError as any).fallbackExplanation = localWhyExplanation;
+        throw enrichedError;
+      }
       return localWhyExplanation;
     }
   }
@@ -122,36 +145,67 @@ class AIExplanationService {
     model: string,
     prompt: string
   ): Promise<string> {
-    const response = await fetch(GROK_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.3,
-        messages: [
-          {
-            role: "system",
-            content:
-              "You explain code clearly for learners and always return strict JSON when asked.",
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-      }),
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Grok API error ${response.status}: ${errorText}`);
+    try {
+      const response = await fetch(GROK_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          temperature: 0.3,
+          messages: [
+            {
+              role: "system",
+              content:
+                "You explain code clearly for learners and always return strict JSON when asked.",
+            },
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new AIRequestError(
+          `AI service returned an error (status ${response.status}). Please try again later.`,
+          "api"
+        );
+      }
+
+      const data = (await response.json()) as GrokChatResponse;
+      return data.choices?.[0]?.message?.content?.trim() || "";
+    } catch (error: unknown) {
+      if (error instanceof AIRequestError) {
+        throw error;
+      }
+      if (error instanceof DOMException && error.name === "AbortError") {
+        throw new AIRequestError(
+          "The AI request timed out. The server may be busy -- please try again in a moment.",
+          "timeout"
+        );
+      }
+      if (error instanceof TypeError && (error.message.includes("fetch") || error.message.includes("network"))) {
+        throw new AIRequestError(
+          "Unable to reach the AI service. Please check your internet connection and try again.",
+          "network"
+        );
+      }
+      throw new AIRequestError(
+        "An unexpected error occurred while contacting the AI service. Please try again.",
+        "unknown"
+      );
+    } finally {
+      clearTimeout(timeoutId);
     }
-
-    const data = (await response.json()) as GrokChatResponse;
-    return data.choices?.[0]?.message?.content?.trim() || "";
   }
 
   private parseJson<T>(raw: string): T | null {
