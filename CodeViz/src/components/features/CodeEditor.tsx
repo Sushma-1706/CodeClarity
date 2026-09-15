@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/sonner";
-import { 
-  Play, 
+import {
+  Play,
   Plus,
   Minus,
-  Upload, 
-  Copy, 
+  Upload,
+  Copy,
   Settings,
   FileText,
   Save,
@@ -19,10 +19,12 @@ import {
   X,
   Trash2,
   RotateCcw,
-  Terminal
+  Terminal,
+  AlertTriangle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLanguageExtension, getLanguageBoilerplate } from "@/lib/editor";
+import { validateCodeInput, INPUT_LIMITS } from "@/lib/inputValidation";
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 import { sandboxExecutionService } from "@/services/sandboxExecutionService";
@@ -86,6 +88,9 @@ console.log(fibonacci(10));`,
   const [outputPanelHeight, setOutputPanelHeight] = useState(112);
   const editorCardRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Input validation
+  const validation = useMemo(() => validateCodeInput(code), [code]);
 
   useEffect(() => {
     onModeChange?.("simplified");
@@ -174,6 +179,12 @@ console.log(fibonacci(10));`,
     const reader = new FileReader();
     reader.onload = () => {
       const text = typeof reader.result === "string" ? reader.result : "";
+      const fileValidation = validateCodeInput(text);
+      if (!fileValidation.isValid) {
+        toast.warning(
+          `Uploaded file exceeds input limits (${fileValidation.charCount.toLocaleString()} chars, ${fileValidation.lineCount.toLocaleString()} lines). The file has been loaded but you will need to reduce its size before submitting.`
+        );
+      }
       setCode(text);
       onCodeChange?.(text);
     };
@@ -256,6 +267,11 @@ console.log(fibonacci(10));`,
   const handleRunCode = async () => {
     if (!code.trim()) {
       toast.error("Editor is empty");
+      return;
+    }
+
+    if (!validation.isValid) {
+      toast.error("Code exceeds input limits. Please reduce the size before running.");
       return;
     }
 
@@ -421,8 +437,8 @@ console.log(fibonacci(10));`,
                size="sm"
                className="gap-2"
                onClick={handleRunCode}
-               disabled={isRunning}
-               title="Run code"
+               disabled={isRunning || !validation.isValid}
+               title={!validation.isValid ? "Code exceeds input limits" : "Run code"}
              >
                <Play className="h-4 w-4" />
                {isRunning ? "Running..." : "Run"}
@@ -484,6 +500,42 @@ console.log(fibonacci(10));`,
               placeholder="Paste your code here or start typing..."
             />
           </div>
+
+          {/* Input validation status bar */}
+          <div className="mt-2 flex items-center justify-between px-1">
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span>{validation.charCount.toLocaleString()} / {INPUT_LIMITS.MAX_CHARACTERS.toLocaleString()} chars</span>
+              <span>{validation.lineCount.toLocaleString()} / {INPUT_LIMITS.MAX_LINES.toLocaleString()} lines</span>
+            </div>
+            {validation.errors.length > 0 && (
+              <div className="flex items-center gap-1.5 text-xs text-destructive font-medium">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                Input limit exceeded
+              </div>
+            )}
+            {validation.errors.length === 0 && validation.warnings.length > 0 && (
+              <div className="flex items-center gap-1.5 text-xs text-yellow-500 font-medium">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                Approaching limit
+              </div>
+            )}
+          </div>
+
+          {/* Validation error/warning messages */}
+          {validation.errors.length > 0 && (
+            <div className="mt-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
+              {validation.errors.map((error, idx) => (
+                <p key={idx} className="text-sm text-destructive">{error}</p>
+              ))}
+            </div>
+          )}
+          {validation.errors.length === 0 && validation.warnings.length > 0 && (
+            <div className="mt-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3">
+              {validation.warnings.map((warning, idx) => (
+                <p key={idx} className="text-sm text-yellow-600 dark:text-yellow-400">{warning}</p>
+              ))}
+            </div>
+          )}
 
           {showOutputPanel && (
           <div className="mt-4 rounded-lg border border-border/30 bg-[#0f1116] shrink-0">

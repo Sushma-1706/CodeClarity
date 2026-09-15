@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   Brain,
   MessageCircle,
   AlertTriangle,
@@ -14,14 +14,18 @@ import {
   Volume2,
   VolumeX,
   Download,
-  Share
+  Share,
+  Loader2,
+  RefreshCw,
+  XCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
-import { aiExplanationService } from "@/services/aiExplanationService";
+import { aiExplanationService, AIRequestError } from "@/services/aiExplanationService";
 import { errorDetectionService } from "@/services/errorDetectionService";
 import { voiceExplanationService } from "@/services/voiceExplanationService";
 import { exportService } from "@/services/exportService";
+import { validateCodeInput } from "@/lib/inputValidation";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface AnalysisPanelProps {
@@ -36,6 +40,9 @@ export const AnalysisPanel = ({ code = "", language = "javascript", mode = "simp
   const [selectedLine, setSelectedLine] = useState<number | null>(null);
   const [explanation, setExplanation] = useState<any>(null);
   const [errors, setErrors] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<{ message: string; type: string } | null>(null);
+  const [retryCounter, setRetryCounter] = useState(0);
   const [complexityData, setComplexityData] = useState({
     time: { value: "O(1)", level: "constant", color: "success" },
     space: { value: "O(1)", level: "constant", color: "success" },
@@ -47,19 +54,58 @@ export const AnalysisPanel = ({ code = "", language = "javascript", mode = "simp
     if (!code.trim()) {
       setExplanation(null);
       setErrors([]);
+      setAnalysisError(null);
+      setIsLoading(false);
       return () => {
         isActive = false;
       };
     }
 
+    // Validate input before sending to AI
+    const validation = validateCodeInput(code);
+    if (!validation.isValid) {
+      setExplanation(null);
+      setErrors([]);
+      setAnalysisError({
+        message: validation.errors.join(" "),
+        type: "validation",
+      });
+      setIsLoading(false);
+      return () => {
+        isActive = false;
+      };
+    }
+
+    setIsLoading(true);
+    setAnalysisError(null);
+
     (async () => {
-      // Generate explanation
-      const exp = await aiExplanationService.generateExplanation(code, language, mode);
-      if (isActive) {
-        setExplanation(exp);
+      try {
+        // Generate explanation
+        const exp = await aiExplanationService.generateExplanation(code, language, mode);
+        if (isActive) {
+          setExplanation(exp);
+          setAnalysisError(null);
+        }
+      } catch (error: unknown) {
+        if (isActive) {
+          if (error instanceof AIRequestError) {
+            // Use the fallback explanation if available
+            const fallback = (error as any).fallbackExplanation;
+            if (fallback) {
+              setExplanation(fallback);
+            }
+            setAnalysisError({ message: error.message, type: error.type });
+          } else {
+            setAnalysisError({
+              message: "Something went wrong while analyzing your code. Please try again.",
+              type: "unknown",
+            });
+          }
+        }
       }
 
-      // Detect errors
+      // Detect errors (local, no API call)
       const detectedErrors = errorDetectionService.detectErrors(code, language);
       if (isActive) {
         setErrors(detectedErrors);
@@ -85,12 +131,16 @@ export const AnalysisPanel = ({ code = "", language = "javascript", mode = "simp
           });
         }
       }
+
+      if (isActive) {
+        setIsLoading(false);
+      }
     })();
 
     return () => {
       isActive = false;
     };
-  }, [code, language, mode]);
+  }, [code, language, mode, retryCounter]);
 
   const handleVoiceToggle = () => {
     if (voiceEnabled) {
@@ -188,31 +238,100 @@ export const AnalysisPanel = ({ code = "", language = "javascript", mode = "simp
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Error banner for AI request failures */}
+          {analysisError && (
+            <div className={cn(
+              "p-4 rounded-lg border flex items-start gap-3",
+              analysisError.type === "validation"
+                ? "bg-destructive/10 border-destructive/30"
+                : analysisError.type === "timeout"
+                ? "bg-yellow-500/10 border-yellow-500/30"
+                : "bg-destructive/10 border-destructive/30"
+            )}>
+              <div className="shrink-0 mt-0.5">
+                {analysisError.type === "timeout" ? (
+                  <Clock className="h-5 w-5 text-yellow-500" />
+                ) : analysisError.type === "validation" ? (
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
+                ) : (
+                  <XCircle className="h-5 w-5 text-destructive" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={cn(
+                  "text-sm font-medium",
+                  analysisError.type === "timeout" ? "text-yellow-600 dark:text-yellow-400" : "text-destructive"
+                )}>
+                  {analysisError.type === "timeout" ? "Request Timed Out" :
+                   analysisError.type === "validation" ? "Input Too Large" :
+                   analysisError.type === "network" ? "Connection Error" :
+                   "Analysis Error"}
+                </p>
+                <p className={cn(
+                  "text-sm mt-1",
+                  analysisError.type === "timeout" ? "text-yellow-600/80 dark:text-yellow-400/80" : "text-destructive/80"
+                )}>
+                  {analysisError.message}
+                </p>
+                {analysisError.type !== "validation" && explanation && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Showing local analysis as a fallback.
+                  </p>
+                )}
+              </div>
+              {analysisError.type !== "validation" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0 gap-1.5"
+                  onClick={() => {
+                    setAnalysisError(null);
+                    setExplanation(null);
+                    setRetryCounter((c) => c + 1);
+                  }}
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Retry
+                </Button>
+              )}
+            </div>
+          )}
+
+          {/* Loading state */}
+          {isLoading && !explanation && (
+            <div className="p-6 bg-surface-muted rounded-lg border border-border/20 flex flex-col items-center gap-3">
+              <Loader2 className="h-6 w-6 text-accent animate-spin" />
+              <p className="text-sm text-muted-foreground">Analyzing your code...</p>
+            </div>
+          )}
+
+          {/* Explanation content */}
           {explanation ? (
             <>
               <div className="p-4 bg-surface-muted rounded-lg border border-border/20">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
                   <Lightbulb className="h-4 w-4 text-accent" />
                   {mode === "simplified" ? "Simplified Explanation (10-year-old level)" : "Technical Explanation (20-year-old level)"}
+                  {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
                 </h4>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {mode === "simplified" ? explanation.simplified : explanation.technical}
                 </p>
               </div>
-              
+
               {whyModeActive && (
                 <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
                   <p className="text-sm text-warning">
-                    💡 Why Mode Active: Click on any line of code in the editor to get detailed explanations!
+                    Why Mode Active: Click on any line of code in the editor to get detailed explanations!
                   </p>
                 </div>
               )}
             </>
-          ) : (
+          ) : !isLoading && !analysisError ? (
             <div className="p-4 bg-surface-muted rounded-lg border border-border/20">
               <p className="text-sm text-muted-foreground">Enter code to see explanations</p>
             </div>
-          )}
+          ) : null}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Real-world Analogy */}
