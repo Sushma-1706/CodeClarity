@@ -40,6 +40,43 @@ It can:
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
 ---
+
+## 🗺️ Architecture Overview
+
+### System Architecture
+
+```mermaid
+flowchart TD
+    A[User] -->|Submits code + prompt| B[React Frontend\nCodeViz]
+    B -->|API request| C[AI Processing Layer]
+    C -->|Code explanation| D[LLM / AI Model]
+    C -->|Execution request| E[Secure Sandbox]
+    D -->|Explanation, flowchart, analysis| B
+    E -->|Step-by-step output, variable state| B
+    B -->|Renders| F[Interactive Flowcharts\n3D Models\nVoice Narration]
+```
+
+### User Journey
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as React Frontend
+    participant AI as AI Processing Layer
+    participant SB as Execution Sandbox
+
+    User->>UI: Paste/write code
+    User->>UI: Select comprehension level
+    UI->>AI: Send code + level
+    AI->>AI: Generate explanation
+    AI-->>UI: Return explanation + flowchart data
+    UI->>SB: Request step-by-step execution
+    SB-->>UI: Return variable states per step
+    UI-->>User: Display explanation, flowchart, 3D model, voice narration
+```
+
+---
+
 ## 📁 Project Structure
 
 ```
