@@ -41,11 +41,23 @@ export const AnalysisPanel = ({ code = "", language = "javascript", mode = "simp
     space: { value: "O(1)", level: "constant", color: "success" },
   });
 
+  const MAX_CODE_LENGTH = 50_000; // ~1,250 lines — prevents DoS and parser crashes
+
   useEffect(() => {
     let isActive = true;
 
     if (!code.trim()) {
       setExplanation(null);
+      setErrors([]);
+      return () => {
+        isActive = false;
+      };
+    }
+
+    if (code.length > MAX_CODE_LENGTH) {
+      setExplanation({
+        error: `Input too large (${code.length.toLocaleString()} characters). Please submit fewer than ${MAX_CODE_LENGTH.toLocaleString()} characters.`,
+      });
       setErrors([]);
       return () => {
         isActive = false;

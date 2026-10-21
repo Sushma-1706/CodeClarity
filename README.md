@@ -22,6 +22,17 @@
 
 ![Line](https://user-images.githubusercontent.com/85225156/171937799-8fc9e255-9889-4642-9c92-6df85fb86e82.gif)
 
+## 📋 Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Features](#-features)
+- [Tech Stack](#️-tech-stack)
+- [Getting Started](#-getting-started)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
 ## 💡 Project Overview
 
 **CodeClarity** is an intelligent AI-powered web platform that supports multiple programming languages (C, C++, Python, Java, JavaScript) and generates detailed, easy-to-understand code explanations.
